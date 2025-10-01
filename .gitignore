@@ -1,0 +1,56 @@
+# File di compilazione
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# Directory di build
+build/
+build-*/
+obj/
+bin/
+dist/
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Eseguibili
+programma
+programma_debug
+smartgrid-simulator
+
+# File temporanei
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# File di profiling
+gmon.out
+analysis.txt
+callgrind.out.*
+cachegrind.out.*
+
+# File di debug
+core
+core.*
+vgcore.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# OS generated files
+.directory
+*/.directory
