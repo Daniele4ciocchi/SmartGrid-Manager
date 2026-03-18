@@ -1,0 +1,8 @@
+#ifndef DEFINITIONS_H
+
+#define TIMESTAMP 5966
+#define WINDOW_SIZE 300
+#define GEOMETRIC_WINDOW 10
+#define WALLET_INITIAL_BALANCE 1000.0
+
+#endif
