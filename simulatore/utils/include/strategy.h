@@ -23,10 +23,10 @@
  * @param b Puntatore alla Batteria che immagazzina l'energia.
  * @param i Timestamp corrente.
  */
-void randomChoise(ReteElettrica* r, Wallet* w, Batteria* b, int i);
+void randomChoise(ReteElettrica* r, Wallet* w, Battery* b, int i);
 
-void personalChoise(ReteElettrica *r, Wallet *w, Batteria *b, int i);
+void personalChoise(ReteElettrica *r, Wallet *w, Battery *b, int i);
 
-void geometricChoise(ReteElettrica *r, Wallet *w, Batteria *b, int i, int j);
+void geometricChoise(ReteElettrica *r, Wallet *w, Battery *b, int i, int j);
 
 #endif 

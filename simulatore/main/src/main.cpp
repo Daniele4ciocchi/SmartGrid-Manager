@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 #pragma omp parallel for
         for (int i = 0; i <= TIMESTAMP - WINDOW_SIZE; i++)
         {
-            Batteria b(1000);
+            Battery b(1000);
             Wallet w(WALLET_INITIAL_BALANCE);
             
 
@@ -79,13 +79,13 @@ int main(int argc, char **argv)
                 for (ReteElettrica &r : reti)
                 {
 
-                    if (r.getPrezzoByTs(j) == -1)
+                    if (r.getPriceByTs(j) == -1)
                         continue;
 
                     if (((j - i + 1) % WINDOW_SIZE == 0 || j == TIMESTAMP) && j != 0)
                     {
-                        utils::Transazione t = w.sellAll(&r, r.getPrezzoByTs(j));
-                        b.scarica(t.corrente);
+                        utils::Transazione t = w.sellAll(&r, r.getPriceByTs(j));
+                        b.discharge(t.corrente);
                     }
 
                     else

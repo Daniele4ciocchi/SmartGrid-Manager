@@ -2,10 +2,10 @@
 #define TRADINGSERVICE_H
 
 #include <vector>
-#include "utils.h"
-#include "Batteria.h"
+#include "Transaction.h"
+#include "Battery.h"
 #include "Wallet.h"
-
+#include "Source.h"
 
 /**
  * @class TradingService
@@ -15,18 +15,16 @@ class TradingService
 {
 
 private:
-    std::vector<utils::Transazione> transazioni;
+    std::vector<Transaction> transactions = {};
 
 public:
-
     TradingService() {};
     ~TradingService() = default;
 
-    std::vector<utils::Transazione> getTransazioni() const { return transazioni; }
+    std::vector<Transaction> getTransactions() const { return transactions; }
 
-    void buy(Wallet w, Batteria b, double quanti, double price);
-    void sell(Wallet w, Batteria b, double quantity, double price);
-
-};
+    void buy(Source *source, Wallet *w, Battery *b, double balance, double price);
+    void sell(Source *source, Wallet *w, Battery *b, double balance, double price);
 
 #endif
+}

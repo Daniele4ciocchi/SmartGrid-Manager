@@ -24,7 +24,7 @@ namespace utils
      */
     struct Transazione
     {
-        Sorgente *sorgente;
+        Source *sorgente;
         double quantity;
         double price;
         double balance;

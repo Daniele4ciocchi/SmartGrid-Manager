@@ -10,10 +10,7 @@ double Wallet::deposit(double amount)
 double Wallet::withdraw(double amount)
 {
     if (amount > this->Avaiable)
-    {
-        std::cerr << "Saldo insufficiente per prelevare " << amount << " unità." << std::endl;
-        return this->Avaiable;
-    }
+        throw std::out_of_range("Il prelievo supera il saldo disponibile");
     this->Avaiable -= amount;
     return this->Avaiable;
 }

@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(
     Classi/include
     utils/include
+    db/include
 )
 
 # Aggiungo i moduli
