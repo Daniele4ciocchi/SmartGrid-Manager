@@ -1,12 +1,16 @@
 #include "TradingService.h"
 
-void buy(Wallet w, Battery b, double balance, double price){
-    Transazione t;
-    t.
+void buy(Wallet w, Batteria b, double balance, double price){
+    utils::Transazione t;
+    t.batteria = b;
+    t.quantita = balance;
+    t.prezzo = price;
+    t.tipo = "buy";
+    transazioni.push_back(t);
 }
 
-void sell(Wallet w, Battery b, double balance, double price){
-    Transazione t;
+void sell(Wallet w, Batteria b, double balance, double price){
+    utils::Transazione t;
     t.batteria = b;
     t.quantita = quantity;
     t.prezzo = price;

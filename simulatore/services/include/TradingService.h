@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "utils.h"
+#include "Batteria.h"
+#include "Wallet.h"
 
 
 /**
@@ -13,17 +15,17 @@ class TradingService
 {
 
 private:
-    std::vector<Transazione> transazioni;
+    std::vector<utils::Transazione> transazioni;
 
 public:
 
     TradingService() {};
     ~TradingService() = default;
 
-    std::vector<Transazione> getTransazioni() const return transazioni; 
+    std::vector<utils::Transazione> getTransazioni() const { return transazioni; }
 
-    void buy(Wallet w, Battery b, double , double price);
-    void sell(Wallet w, Battery b, double quantity, double price);
+    void buy(Wallet w, Batteria b, double quanti, double price);
+    void sell(Wallet w, Batteria b, double quantity, double price);
 
 };
 

@@ -8,17 +8,11 @@
  */
 int Batteria::carica(int carica)
 {
-    if (carica <= getSpazioDisponibile())
-    {
-        livello += carica;
-        return carica;
-    }
-    else
-    {
-        int eccedenza = carica - getSpazioDisponibile();
-        livello = capacita;
-        return eccedenza;
-    }
+    if (carica > (capacita - livello))
+        return -1;
+
+    livello += carica;
+    return carica;
 }
 
 /**
@@ -28,15 +22,8 @@ int Batteria::carica(int carica)
  */
 int Batteria::scarica(int scarica)
 {
-    if (scarica <= livello)
-    {
-        livello -= scarica;
-        return scarica;
-    }
-    else
-    {
-        int erogato = livello;
-        livello = 0;
-        return erogato;
-    }
+    if (scarica < livello)
+        return -1;
+    livello -= scarica;
+    return scarica;
 }
