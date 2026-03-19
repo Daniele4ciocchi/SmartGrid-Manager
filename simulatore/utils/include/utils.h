@@ -1,8 +1,8 @@
 #ifndef UTILS
 #define UTILS
 
-#include "Sorgente.h"
-#include "ReteElettrica.h"
+#include "Source.h"
+#include "ElectricityGrid.h"
 #include <vector>
 #include <cstdio>
 #include <fstream>
@@ -19,19 +19,8 @@
  */
 namespace utils
 {
-    /**
-     * @brief Struttura per rappresentare una transazione.
-     */
-    struct Transazione
-    {
-        Source *sorgente;
-        double quantity;
-        double price;
-        double balance;
-        bool in_out; // 1 = in, 0 = out
-    };
 
-    void readFromDb(Database &db, std::vector<ReteElettrica> &reti);
+    void readFromDb(Database &db, std::vector<ElectricityGrid> &reti);
 
     void insertIntoDb(Database &db);
 

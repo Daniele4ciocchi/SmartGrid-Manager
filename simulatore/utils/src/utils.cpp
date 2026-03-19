@@ -5,7 +5,7 @@ namespace utils
 
     // devo rtitornare un puntatore ad un array di sorgenti
 
-    void readFromDb(Database &db, std::vector<ReteElettrica> &reti)
+    void readFromDb(Database &db, std::vector<ElectricityGrid> &reti)
     {
         std::string sql;
 

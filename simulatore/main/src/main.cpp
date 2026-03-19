@@ -1,8 +1,8 @@
-#include "Rinnovabile.h"
-#include "Batteria.h"
-#include "Consumatore.h"
-#include "ReteElettrica.h"
+#include "Battery.h"
+#include "ElectricityGrid.h"
+#include "Source.h"
 #include "utils.h"
+#include "definitions.h"
 #include "Database.h"
 #include "strategy.h"
 #include "Wallet.h"
@@ -13,11 +13,7 @@
 #include <vector>
 #include <iomanip>
 #include <omp.h>
-
-#define TIMESTAMP 5966
-#define WINDOW_SIZE 300
-#define GEOMETRIC_WINDOW 10
-#define WALLET_INITIAL_BALANCE 1000.0
+#
 
 int main(int argc, char **argv)
 {

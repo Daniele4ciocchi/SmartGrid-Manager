@@ -1,6 +1,6 @@
 #include "strategy.h"
 
-void randomChoise(ReteElettrica *r, Wallet *w, Battery *b, int j)
+void randomChoise(ElectricityGrid *r, Wallet *w, Battery *b, int j)
 {
     // Random number generator for thread safety
     static thread_local std::mt19937 gen(std::random_device{}());
@@ -20,7 +20,7 @@ void randomChoise(ReteElettrica *r, Wallet *w, Battery *b, int j)
     }
 }
 
-void personalChoise(ReteElettrica *r, Wallet *w, Battery *b, int j)
+void personalChoise(ElectricityGrid *r, Wallet *w, Battery *b, int j)
 {
     int livello = b->getLevel();
     int spazio = b->getFreeSpace();
@@ -54,7 +54,7 @@ void personalChoise(ReteElettrica *r, Wallet *w, Battery *b, int j)
     // ALTRIMENTI: niente
 }
 
-void geometricChoise(ReteElettrica *r, Wallet *w, Battery *b, int i, int j)
+void geometricChoise(ElectricityGrid *r, Wallet *w, Battery *b, int i, int j)
 {
 
     int livello = b->getLevel();
