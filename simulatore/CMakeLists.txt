@@ -9,11 +9,15 @@ include_directories(
     Classi/include
     utils/include
     db/include
+    simulator/include
+    define/include
 )
 
 # Aggiungo i moduli
+add_subdirectory(define)
 add_subdirectory(Classi)
 add_subdirectory(utils)
+add_subdirectory(simulator)
 add_subdirectory(main)
 add_subdirectory(db)
 add_subdirectory(services)

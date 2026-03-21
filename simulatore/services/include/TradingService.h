@@ -9,22 +9,22 @@
 
 /**
  * @class TradingService
- * @brief a class that grant the selling and the buying
+ * @brief Gestisce le operazioni di acquisto e vendita registrando le transazioni.
  */
 class TradingService
 {
-
 private:
-    std::vector<Transaction> transactions = {};
+    std::vector<Transaction> transactions{};
 
 public:
-    TradingService() {};
+    TradingService() = default;
     ~TradingService() = default;
 
     std::vector<Transaction> getTransactions() const { return transactions; }
 
-    void buy(Source *source, Wallet *w, Battery *b, double balance, double price);
-    void sell(Source *source, Wallet *w, Battery *b, double balance, double price);
+    // quantity = energia (kWh) acquistata/venduta, price = prezzo per unità
+    void buy(Source *source, Wallet *w, Battery *b, double quantity, double price);
+    void sell(Source *source, Wallet *w, Battery *b, double quantity, double price);
+};
 
 #endif
-}

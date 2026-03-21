@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# run.sh - trova ed esegue l'eseguibile 'programma' generato nella build
+# run.sh - trova ed esegue l'eseguibile principale generato nella build
 # Uso:
 #   ./run.sh [--build] [--exe <path>] [--] [args...]
 # - --build : esegue ./build.sh prima di lanciare
@@ -43,32 +43,13 @@ fi
 if [[ -n "$EXE_OVERRIDE" ]]; then
   EXE_PATH="$EXE_OVERRIDE"
 else
-  # predefinito: eseguibile nella sottocartella build/simulatore/main
-  DEFAULT_EXE_A="$PROJ_ROOT/build/simulatore/main/programma"
-  DEFAULT_EXE_B="$PROJ_ROOT/build/simulatore/main/simulatore"
-  if [[ -x "$DEFAULT_EXE_A" ]]; then
-    EXE_PATH="$DEFAULT_EXE_A"
-  elif [[ -x "$DEFAULT_EXE_B" ]]; then
-    EXE_PATH="$DEFAULT_EXE_B"
-  else
-    # fallback: cerca in percorsi comuni
-    CANDIDATES=(
-      "$PROJ_ROOT/build/simulatore/main/programma"
-      "$PROJ_ROOT/build/simulatore/programma"
-      "$PROJ_ROOT/build/programma"
-    )
-    EXE_PATH=""
-    for c in "${CANDIDATES[@]}"; do
-      if [[ -x "$c" ]]; then
-        EXE_PATH="$c"
-        break
-      fi
-    done
-  fi
+  # eseguibile di default generato da CMake
+  EXE_PATH="$PROJ_ROOT/build/simulatore/main/simulatore"
 fi
 
-if [[ -z "$EXE_PATH" ]]; then
-  echo "Impossibile trovare l'eseguibile 'programma'. Prova a lanciare con --build o passare --exe <path>" >&2
+if [[ ! -x "$EXE_PATH" ]]; then
+  echo "Impossibile trovare l'eseguibile principale ($EXE_PATH)." >&2
+  echo "Esegui ./run.sh --build oppure specifica il percorso con --exe <path>." >&2
   exit 1
 fi
 

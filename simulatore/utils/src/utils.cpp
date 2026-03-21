@@ -9,48 +9,33 @@ namespace utils
     {
         std::string sql;
 
-        sql = "SELECT sorgente, ts, prezzo FROM valore AS v ORDER BY sorgente, ts;";
+        sql = "SELECT sorgente, ts, prezzo, prezzo_log FROM valore AS v ORDER BY sorgente, ts;";
 
         std::vector<std::vector<std::string>> prezzi = db.select(sql);
         if (prezzi.empty())
             std::cerr << "Errore: nessuna sorgente trovata nel database\n";
 
-        sql = "SELECT * FROM media_geometrica AS m ORDER BY sorgente, da_ts;";
-        std::vector<std::vector<std::string>> medie = db.select(sql);
-        if (medie.empty())
-            std::cerr << "Errore: nessuna media geometrica trovata nel database\n";
-
         for (const auto &row : prezzi)
         {
             int id = std::stoi(row[0]);
-            int ts = std::stoi(row[1]);
             double prezzo = std::stod(row[2]);
+            double prezzo_log = std::stod(row[3]);
 
-            while ((int)reti.size() <= id)
+            while (static_cast<int>(reti.size()) <= id)
                 reti.emplace_back();
 
-            reti[id].addPrezzo(prezzo);
+            reti[id].setId(id);
+            reti[id].addPrice(prezzo);
+            reti[id].addPriceLog(prezzo_log);
         }
-        
-        for (const auto &row : medie)
-        {
-            int id = std::stoi(row[0]);
-            int ts = std::stoi(row[2]);
-            double media = std::stod(row[3]);
-
-
-            reti[id].addMedia(media);
-        }
-        
     }
 
-    void insertIntoDb(Database &db)
+    void insertIntoDb(Database &db, const std::string &csvPath)
     {
-        std::ifstream in("data/datafile.csv");
-        // ifstream in("data/datamio.csv");
+        std::ifstream in(csvPath);
         if (!in.is_open())
         {
-            std::cerr << "Errore: impossibile aprire data/datafile.csv\n";
+            std::cerr << "Errore: impossibile aprire " << csvPath << "\n";
             return;
         }
 
@@ -83,41 +68,33 @@ namespace utils
         db.execute("COMMIT;");
     }
 
-    void calculateGeometricMean(Database &db, int sorgente, int i, int window_size)
+    double geometricMean(const ElectricityGrid &grid, int ts)
     {
-        double geometric_mean = 0.0;
-        std::string sql = "SELECT prezzo_log FROM valore WHERE sorgente = " + std::to_string(sorgente) +
-                          " AND ts >= " + std::to_string(i) +
-                          " AND ts < " + std::to_string(i + window_size) +
-                          " AND prezzo > 0;";
+        int start = ts - GEOMETRIC_WINDOW + 1;
+        if (start < 0)
+            return -1.0;
 
-        std::vector<std::vector<std::string>> results = db.select(sql);
-        if (!results.empty())
+        double logSum = 0.0;
+        int count = 0;
+
+        for (int k = start; k <= ts; ++k)
         {
-            double sum = 0.0;
-            int count = 0;
-            for (const auto &row : results)
+            try
             {
-                sum += std::stod(row[0]);
+                logSum += grid.getPriceLogByTs(k);
                 count++;
             }
-
-            // double geometric_mean = exp(sum) / count;
-            geometric_mean = exp(sum / count);
+            catch (const std::out_of_range &)
+            {
+                return -1.0; // dati insufficienti
+            }
         }
 
-        if (sorgente == 1)
-            std::cout << "Sorgente: " << sorgente << ", da_ts: " << i << ", a_ts: " << i + window_size << ", media geometrica: " << geometric_mean << std::endl;
+        if (count == 0)
+            return -1.0;
 
-        sql = "INSERT OR REPLACE INTO media_geometrica (sorgente, da_ts, a_ts, media) VALUES (" +
-              std::to_string(sorgente) + ", " +
-              std::to_string(i) + ", " +
-              std::to_string(i + window_size) + ", " +
-              std::to_string(geometric_mean) + ");";
-        if (!db.execute(sql))
-        {
-            std::cerr << "Errore: impossibile inserire la media geometrica nel database\n";
-        }
+        return exp(logSum / count);
+
     }
 
 }

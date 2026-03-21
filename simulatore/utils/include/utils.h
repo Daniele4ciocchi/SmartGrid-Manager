@@ -11,6 +11,7 @@
 #include <math.h>
 #include <omp.h>
 #include <string>
+#include "definitions.h"
 
 
 /**
@@ -22,9 +23,14 @@ namespace utils
 
     void readFromDb(Database &db, std::vector<ElectricityGrid> &reti);
 
-    void insertIntoDb(Database &db);
+    // csvPath opzionale, di default usa data/datafile.csv
+    void insertIntoDb(Database &db, const std::string &csvPath = "data/datafile.csv");
 
-    void calculateGeometricMean(Database &db, int sorgente, int i, int window_size);
+    // Calcola la media geometrica dei prezzi per una sorgente
+    // usando i valori logaritmici già caricati in memoria
+    // sulla finestra [ts - GEOMETRIC_WINDOW + 1, ts].
+    // Restituisce -1.0 se non ci sono dati.
+    double geometricMean(const ElectricityGrid &grid, int ts);
 
 }
 #endif 

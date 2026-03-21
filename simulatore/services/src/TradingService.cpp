@@ -1,27 +1,37 @@
 #include "TradingService.h"
 
-void buy(Source *source, Wallet *w, Battery *b, double balance, double price){
+void TradingService::buy(Source *source, Wallet *w, Battery *b, double quantity, double price)
+{
     Transaction t;
 
-    t.balance = balance;
+    double cost = quantity * price;
+
+    t.balance = w->getTotalBalance();
     t.price = price;
-    t.quantity = balance * price;
-    t.in_out = 0; // in
+    t.quantity = quantity;
+    t.in_out = false; // in
     t.source = source;
 
-    w->withdraw(t.quantity);
-    b->charge(t.quantity);
+    w->withdraw(cost);
+    b->charge(quantity);
+
+    transactions.push_back(t);
 }
 
-void sell(Source *source, Wallet *w, Battery *b, double balance, double price){
+void TradingService::sell(Source *source, Wallet *w, Battery *b, double quantity, double price)
+{
     Transaction t;
 
-    t.balance = balance;
+    double revenue = quantity * price;
+
+    t.balance = w->getTotalBalance();
     t.price = price;
-    t.quantity = balance * price;
-    t.in_out = 1; // out
+    t.quantity = quantity;
+    t.in_out = true; // out
     t.source = source;
 
-    w->deposit(t.quantity);
-    b->discharge(t.quantity);
+    w->deposit(revenue);
+    b->discharge(quantity);
+
+    transactions.push_back(t);
 }

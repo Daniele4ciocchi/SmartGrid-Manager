@@ -4,3 +4,5 @@ file(GLOB CLASSI_SRC src/*.cpp)
 add_library(Classi ${CLASSI_SRC})
 
 target_include_directories(Classi PUBLIC include)
+
+target_link_libraries(Classi PUBLIC Definitions)

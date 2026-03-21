@@ -1,10 +1,13 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#define SOURCES 999
 #define TIMESTAMP 5966
 #define WINDOW_SIZE 300
-#define GEOMETRIC_WINDOW 10
+#define GEOMETRIC_WINDOW 10 // 30 - 40
 #define WALLET_INITIAL_BALANCE 1000.0
 #define SET_ASIDE_PERCENTAGE 20.0
+#define DB_PATH "data/datafile.csv"
+#define BATTERY_CAPACITY 100.0
 
 #endif

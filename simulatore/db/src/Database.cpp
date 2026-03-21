@@ -123,18 +123,10 @@ bool Database::createTables() {
             FOREIGN KEY (sorgente) REFERENCES sorgente(id)
         );
 
-        CREATE TABLE IF NOT EXISTS media_geometrica (
-            sorgente INTEGER NOT NULL,
-            da_ts INTEGER NOT NULL,
-            a_ts INTEGER NOT NULL,
-            media REAL NOT NULL,
-
-            PRIMARY KEY (sorgente, da_ts, a_ts),
-            FOREIGN KEY (sorgente) REFERENCES sorgente(id)
-        );
-
-
     )";
+
+    // Rimuove la tabella legacy, se esiste ancora
+    execute("DROP TABLE IF EXISTS media_geometrica;");
 
     return execute(sql);
 }

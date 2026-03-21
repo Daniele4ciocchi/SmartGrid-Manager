@@ -12,7 +12,7 @@ double Battery::charge(double charge)
 
 double Battery::discharge(double discharge)
 {
-    if (discharge < level)
+    if (discharge > level)
         throw std::out_of_range("La scarica supera il livello attuale della batteria");
     level -= discharge;
     return discharge;

@@ -6,6 +6,7 @@
 #include "ElectricityGrid.h"
 #include "utils.h"
 #include "Battery.h"
+#include "TradingService.h"
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -23,10 +24,6 @@
  * @param b Puntatore alla Batteria che immagazzina l'energia.
  * @param i Timestamp corrente.
  */
-void randomChoise(ElectricityGrid* r, Wallet* w, Battery* b, int i);
-
-void personalChoise(ElectricityGrid *r, Wallet *w, Battery *b, int i);
-
-void geometricChoise(ElectricityGrid *r, Wallet *w, Battery *b, int i, int j);
+void randomChoise(ElectricityGrid* r, Wallet* w, Battery* b, TradingService* ts, int i);
 
 #endif 
