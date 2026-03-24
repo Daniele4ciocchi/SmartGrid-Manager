@@ -71,8 +71,6 @@ namespace utils
     double geometricMean(const ElectricityGrid &grid, int ts)
     {
         int start = ts - GEOMETRIC_WINDOW + 1;
-        if (start < 0)
-            return -1.0;
 
         double logSum = 0.0;
         int count = 0;
@@ -81,8 +79,11 @@ namespace utils
         {
             try
             {
-                logSum += grid.getPriceLogByTs(k);
-                count++;
+                if (grid.getPriceByTs(k) != -1)
+                {
+                    logSum += grid.getPriceLogByTs(k);
+                    count++;
+                }
             }
             catch (const std::out_of_range &)
             {

@@ -3,7 +3,7 @@
 double Wallet::deposit(double amount)
 {   
     this->Set_Aside += (amount * SET_ASIDE_PERCENTAGE) / 100.0;
-    this->Avaiable += amount - (amount * SET_ASIDE_PERCENTAGE) / 100.0;
+    this->Avaiable += (amount * (100.0 - SET_ASIDE_PERCENTAGE)) / 100.0;
     return this->Avaiable;
 }
 
