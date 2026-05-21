@@ -70,12 +70,14 @@ namespace utils
 
     double geometricMean(const ElectricityGrid &grid, int ts)
     {
-        int start = ts - GEOMETRIC_WINDOW + 1;
+        // Partiamo da GEOMETRIC_WINDOW timestamp indietro
+        int start = ts - GEOMETRIC_WINDOW;
 
         double logSum = 0.0;
         int count = 0;
 
-        for (int k = start; k <= ts; ++k)
+        // Iteriamo fino al timestamp precedente (k < ts) escludendo il valore attuale
+        for (int k = start; k < ts; ++k)
         {
             try
             {
@@ -96,6 +98,43 @@ namespace utils
 
         return exp(logSum / count);
 
+    }
+
+    void logExperiment(const std::string &strategyName, double averageYield, double standardDeviation, const std::string &outputFile)
+    {
+        bool fileExists = false;
+        std::ifstream f(outputFile.c_str());
+        if (f.good())
+        {
+            fileExists = true;
+        }
+        f.close();
+
+        std::ofstream out(outputFile, std::ios_base::app);
+        if (!out.is_open())
+        {
+            std::cerr << "Errore: impossibile aprire " << outputFile << " per scrivere i risultati\n";
+            return;
+        }
+
+        if (!fileExists)
+        {
+            // Scrive l'header se il file non esiste
+            out << "Strategia,Finestra Geometrica,Finestra Simulazione,Budget,Initial Balance,Set Aside %,Buy Threshold,Sell Threshold,Average Yield (%),Standard Deviation (%)\n";
+        }
+
+        out << strategyName << ","
+            << GEOMETRIC_WINDOW << ","
+            << WINDOW_SIZE << ","
+            << BUDGET << ","
+            << WALLET_INITIAL_BALANCE << ","
+            << SET_ASIDE_PERCENTAGE << ","
+            << BUY_THRESHOLD << ","
+            << SELL_THRESHOLD << ","
+            << averageYield << ","
+            << standardDeviation << "\n";
+
+        out.close();
     }
 
 }

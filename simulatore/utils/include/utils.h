@@ -32,5 +32,8 @@ namespace utils
     // Restituisce -1.0 se non ci sono dati.
     double geometricMean(const ElectricityGrid &grid, int ts);
 
+    // Registra i risultati e i parametri di un esperimento in un file CSV
+    void logExperiment(const std::string &strategyName, double averageYield, double standardDeviation, const std::string &outputFile = "data/esperimenti.csv");
+
 }
 #endif 

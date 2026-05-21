@@ -12,7 +12,7 @@ void randomChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, Tra
         double price = r.getPriceByTs(j);
         if (price == -1)
             continue;
-        double budget = 10;
+        double budget = BUDGET;
 
         int choice = action(gen);
 
@@ -29,35 +29,34 @@ void randomChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, Tra
 
 void geometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, TradingService *ts, int j)
 {
-    if (j < GEOMETRIC_WINDOW)
+    if (j <= GEOMETRIC_WINDOW)
         return;
 
     for (ElectricityGrid &r : reti)
     {
         double price = r.getPriceByTs(j);
-        if (price <= 0)
+        if (price == -1)
             continue;
 
         double geoMean = utils::geometricMean(r, j);
         if (geoMean < 0)
             continue;
 
-        double budget = 10;
 
-        if (price / geoMean < 0.85)
+        if (price / geoMean < BUY_THRESHOLD)
         {
-            ts->buy(&r, w, b, budget, price);
+            ts->buy(&r, w, b, BUDGET, price);
         }
-        else if (price / geoMean > 1.00)
+        else if (price / geoMean > SELL_THRESHOLD)
         {
-            ts->sell(&r, w, b, budget, price);
+            ts->sell(&r, w, b, BUDGET, price);
         }
     }
 }
 
 void smartgeometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, TradingService *ts, int j)
 {
-    if (j < GEOMETRIC_WINDOW)
+    if (j <= GEOMETRIC_WINDOW)
         return;
 
     std::set<std::pair<double, ElectricityGrid *>> geometricValues;
@@ -75,35 +74,32 @@ void smartgeometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery
         geometricValues.insert({price / geoMean, &r});
     }
 
-    double budget = 70;
-    const int MAX_TRANSACTIONS = 300;
-    const double BUY_THRESHOLD = 0.90;
-    const double SELL_THRESHOLD = 1.10;
-
+  
+    int soglia = 0;
     // Compra energia dalle reti con il rapporto prezzo/media più basso
-    int buyCount = 0;
+
     for (const auto &[ratio, grid] : geometricValues)
     {
-        if (buyCount >= MAX_TRANSACTIONS || ratio >= BUY_THRESHOLD)
+        if (ratio >= BUY_THRESHOLD || soglia >= MAX_BUY)
             break;
 
-        if (ts->canBuy(grid, w, b, budget, grid->getPriceByTs(j)))
-            ts->buy(grid, w, b, budget, grid->getPriceByTs(j));
-        buyCount++;
+        if (ts->canBuy(grid, w, b, BUDGET, grid->getPriceByTs(j)))
+            ts->buy(grid, w, b, BUDGET, grid->getPriceByTs(j));
+        soglia++;
     }
 
+    soglia = 0;
     // Vende energia alle reti con il rapporto prezzo/media più alto (partendo dai massimi)
-    int sellCount = 0;
     for (auto it = geometricValues.rbegin(); it != geometricValues.rend(); ++it)
     {
         double ratio = it->first;
         ElectricityGrid *grid = it->second;
 
-        if (sellCount >= MAX_TRANSACTIONS || ratio <= SELL_THRESHOLD)
+        if (ratio <= SELL_THRESHOLD || soglia >= MAX_SELL)
             break;
 
-        if (ts->canSell(grid, w, b, budget, grid->getPriceByTs(j)))
-            ts->sell(grid, w, b, budget, grid->getPriceByTs(j));
-        sellCount++;
+        if (ts->canSell(grid, w, b, BUDGET, grid->getPriceByTs(j)))
+            ts->sell(grid, w, b, BUDGET, grid->getPriceByTs(j));
+        soglia++;
     }
 }

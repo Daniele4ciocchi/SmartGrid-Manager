@@ -45,10 +45,19 @@ void Simulator::run()
             }
         }
     }
+    double avgYield = monitor::calculateAverage();
+    double stdDev = monitor::calculateStandardDeviation();
 
-    std::cout << "media: " << monitor::calculateAverage() * 100 << "%" << std::endl;
-    std::cout << "deviazione standard: " << monitor::calculateStandardDeviation() * 100 << "%" << std::endl;
-    std::cout << "range: "
-              << monitor::calculateAverage() * 100 - monitor::calculateStandardDeviation() * 100 << "% - "
-              << monitor::calculateAverage() * 100 + monitor::calculateStandardDeviation() * 100 << "%" << std::endl;
+    std::cout << "budget: " << BUDGET << std::endl;
+    std::cout << "buy threshold: " << BUY_THRESHOLD << std::endl;
+    std::cout << "sell threshold: " << SELL_THRESHOLD << std::endl;
+    std::cout << "set aside: " << SET_ASIDE_PERCENTAGE << "%" << std::endl;
+    std::cout << "geometric window: " << GEOMETRIC_WINDOW << std::endl;
+    std::cout << "media yeld: " << avgYield * 100 << "%" << std::endl;
+    std::cout << "deviazione standard yeld: " << stdDev * 100 << "%" << std::endl;
+    std::cout << "range: " << (avgYield - stdDev) * 100 << "% - " << (avgYield + stdDev) * 100 << "%" << std::endl;
+
+    // Registra i dati dell'esperimento
+    // Nota: modificare il nome della strategia in base a quella abilitata nel ciclo sopra
+    utils::logExperiment("smartGeometricChoise", avgYield, stdDev);
 }

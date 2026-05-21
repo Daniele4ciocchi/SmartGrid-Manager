@@ -3,11 +3,19 @@
 
 #define SOURCES 999
 #define TIMESTAMP 5966
-#define WINDOW_SIZE 300
-#define GEOMETRIC_WINDOW 10 // 30 - 40
-#define WALLET_INITIAL_BALANCE 1000.0
-#define SET_ASIDE_PERCENTAGE 20.0
 #define DB_PATH "data/datafile.csv"
-#define BATTERY_CAPACITY 100.0
+
+// Variabili globali d'ambiente (configurabili a runtime)
+extern int WINDOW_SIZE;
+extern int GEOMETRIC_WINDOW;
+extern double WALLET_INITIAL_BALANCE;
+extern double SET_ASIDE_PERCENTAGE;
+extern double BATTERY_CAPACITY;
+
+extern double BUDGET;
+extern double BUY_THRESHOLD;
+extern double SELL_THRESHOLD;
+extern int MAX_BUY;
+extern int MAX_SELL;
 
 #endif
