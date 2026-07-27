@@ -1,15 +1,15 @@
 #include "TradingService.h"
 
-bool TradingService::canBuy(Source *source, Wallet *w, Battery *b, double balance, double price)
+bool TradingService::canBuy(Source */*source*/, Wallet *w, Battery *b, double balance, double price)
 {
     double quantity = balance / price;
     return w->getAvaiable() >= balance && b->getFreeSpace() >= quantity;
 }
 
-bool TradingService::canSell(Source *source, Wallet *w, Battery *b, double balance, double price)
+bool TradingService::canSell(Source *source, Wallet */*w*/, Battery *b, double balance, double price)
 {
     double quantity = balance / price;
-    return b->getLevel() >= quantity;
+    return b->getLevel() >= quantity && sourceQuantity[source] >= quantity;
 }
 
 void TradingService::buy(Source *source, Wallet *w, Battery *b, double balance, double price)
@@ -44,7 +44,7 @@ void TradingService::sell(Source *source, Wallet *w, Battery *b, double balance,
 {
     double quantity = balance / price;
 
-    if ( b->getLevel() < quantity)
+    if (!canSell(source, w, b, balance, price))
         return;
 
     Transaction t;
@@ -77,10 +77,15 @@ void TradingService::sellAll(std::vector<ElectricityGrid> *grids, Wallet *w, Bat
         double quantity = sourceQuantity[source];
         if (quantity > 0)
         {
-            while (grid.getPriceByTs(ts) <= 0)
-                ts--;
-            sell(source, w, b, quantity * grid.getPriceByTs(ts), grid.getPriceByTs(ts));
-            sourceQuantity[source] = 0;
+            int current_ts = ts;
+            while (current_ts >= 0 && grid.getPriceByTs(current_ts) <= 0)
+                current_ts--;
+                
+            if (current_ts >= 0)
+            {
+                sell(source, w, b, quantity * grid.getPriceByTs(current_ts), grid.getPriceByTs(current_ts));
+                sourceQuantity[source] = 0;
+            }
         }
     }
 }

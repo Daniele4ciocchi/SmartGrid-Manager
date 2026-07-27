@@ -71,33 +71,18 @@ namespace utils
     double geometricMean(const ElectricityGrid &grid, int ts)
     {
         // Partiamo da GEOMETRIC_WINDOW timestamp indietro
-        int start = ts - GEOMETRIC_WINDOW;
+        int start = std::max(0, ts - GEOMETRIC_WINDOW);
+        int end = std::min(ts, grid.getPricesSize());
 
-        double logSum = 0.0;
-        int count = 0;
-
-        // Iteriamo fino al timestamp precedente (k < ts) escludendo il valore attuale
-        for (int k = start; k < ts; ++k)
-        {
-            try
-            {
-                if (grid.getPriceByTs(k) != -1)
-                {
-                    logSum += grid.getPriceLogByTs(k);
-                    count++;
-                }
-            }
-            catch (const std::out_of_range &)
-            {
-                return -1.0; // dati insufficienti
-            }
-        }
-
-        if (count == 0)
+        if (start >= end)
             return -1.0;
 
-        return exp(logSum / count);
+        int count = grid.getValidCount(start, end);
+        if (count == 0)
+            return -1.0; // dati insufficienti
 
+        double logSum = grid.getPriceLogSum(start, end);
+        return exp(logSum / count);
     }
 
     void logExperiment(const std::string &strategyName, double averageYield, double standardDeviation, const std::string &outputFile)
@@ -120,7 +105,7 @@ namespace utils
         if (!fileExists)
         {
             // Scrive l'header se il file non esiste
-            out << "Strategia,Finestra Geometrica,Finestra Simulazione,Budget,Initial Balance,Set Aside %,Buy Threshold,Sell Threshold,Average Yield (%),Standard Deviation (%)\n";
+            out << "Strategia,Finestra Geometrica,Finestra Simulazione,Budget,Initial Balance,Set Aside %,Buy Threshold,Sell Threshold,Average Yield (%),Standard Deviation (%),Guadagno Finale Medio\n";
         }
 
         out << strategyName << ","
@@ -131,8 +116,9 @@ namespace utils
             << SET_ASIDE_PERCENTAGE << ","
             << BUY_THRESHOLD << ","
             << SELL_THRESHOLD << ","
-            << averageYield << ","
-            << standardDeviation << "\n";
+            << averageYield * 100 << ","
+            << standardDeviation * 100 << ","
+            << WALLET_INITIAL_BALANCE * averageYield << "\n";
 
         out.close();
     }

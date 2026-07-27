@@ -8,7 +8,7 @@ cd .. || exit
 
 # Array di parametri da testare
 BUDGET_VALS=(10)
-BUY_VALS=(1 0.90 0.80 0.70)
+BUY_VALS=(0.90 0.80 0.70)
 SELL_VALS=(1.00)
 GEOM_VALS=(10 20 50 100)
 SET_ASIDE_VALS=(10 20 30 50)

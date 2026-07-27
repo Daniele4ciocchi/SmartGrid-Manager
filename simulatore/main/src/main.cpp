@@ -16,8 +16,8 @@ double BATTERY_CAPACITY = 1000.0;
 double BUDGET = 10.0;
 double BUY_THRESHOLD = 0.80;
 double SELL_THRESHOLD = 1.00;
-int MAX_BUY = 200; // massimo numero di acquisti per finestra
-int MAX_SELL = 200; // massimo numero di vendite per finestra
+int MAX_BUY = 200; // massimo numero di acquisti per timestamp
+int MAX_SELL = 200; // massimo numero di vendite per timestamp
 
 int main(int argc, char **argv)
 {

@@ -14,7 +14,8 @@ class ElectricityGrid : public Source
 {
 private:
     std::vector<double> prices;
-    std::vector<double> prices_log;
+    std::vector<double> prices_log; // now used as prefix sum of logs
+    std::vector<int> valid_prices_count; // prefix sum of valid price counts
     int sourceId = -1;
 
 public:
@@ -28,10 +29,12 @@ public:
     // Prezzi
     void addPrice(double prezzo);
     double getPriceByTs(int ts) const;
+    int getPricesSize() const { return prices.size(); }
 
     // Prezzi logaritmici per la media geometrica
     void addPriceLog(double prezzo_log);
-    double getPriceLogByTs(int ts) const;
+    double getPriceLogSum(int start, int end) const;
+    int getValidCount(int start, int end) const;
 };
 
 #endif

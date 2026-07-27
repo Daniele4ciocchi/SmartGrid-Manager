@@ -31,6 +31,7 @@ def load_data(filepath: str = CSV_PATH) -> pd.DataFrame | None:
         "Sell Threshold",
         "Average Yield (%)",
         "Standard Deviation (%)",
+        "Guadagno Finale Medio",
     ]
     for col in num_cols:
         if col in df.columns:
