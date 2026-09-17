@@ -70,57 +70,29 @@ namespace utils
 
     double geometricMean(const ElectricityGrid &grid, int ts)
     {
-        // Partiamo da GEOMETRIC_WINDOW timestamp indietro
-        int start = std::max(0, ts - GEOMETRIC_WINDOW);
-        int end = std::min(ts, grid.getPricesSize());
+        int start = ts - GEOMETRIC_WINDOW + 1;
 
-        if (start >= end)
-            return -1.0;
-
-        int count = grid.getValidCount(start, end);
-        if (count == 0)
+        if (start < 0)
             return -1.0; // dati insufficienti
 
-        double logSum = grid.getPriceLogSum(start, end);
-        return exp(logSum / count);
-    }
-
-    void logExperiment(const std::string &strategyName, double averageYield, double standardDeviation, const std::string &outputFile)
-    {
-        bool fileExists = false;
-        std::ifstream f(outputFile.c_str());
-        if (f.good())
+        try
         {
-            fileExists = true;
+            int available = grid.getLogSize();
+            if (ts >= available)
+                return -1.0; // dati insufficienti
+
+            double logSum = grid.getLogSumRange(start, ts);
+            int count = ts - start + 1;
+            if (count <= 0)
+                return -1.0;
+
+            return exp(logSum / count);
         }
-        f.close();
-
-        std::ofstream out(outputFile, std::ios_base::app);
-        if (!out.is_open())
+        catch (const std::out_of_range &)
         {
-            std::cerr << "Errore: impossibile aprire " << outputFile << " per scrivere i risultati\n";
-            return;
+            return -1.0;
         }
 
-        if (!fileExists)
-        {
-            // Scrive l'header se il file non esiste
-            out << "Strategia,Finestra Geometrica,Finestra Simulazione,Budget,Initial Balance,Set Aside %,Buy Threshold,Sell Threshold,Average Yield (%),Standard Deviation (%),Guadagno Finale Medio\n";
-        }
-
-        out << strategyName << ","
-            << GEOMETRIC_WINDOW << ","
-            << WINDOW_SIZE << ","
-            << BUDGET << ","
-            << WALLET_INITIAL_BALANCE << ","
-            << SET_ASIDE_PERCENTAGE << ","
-            << BUY_THRESHOLD << ","
-            << SELL_THRESHOLD << ","
-            << averageYield * 100 << ","
-            << standardDeviation * 100 << ","
-            << WALLET_INITIAL_BALANCE * averageYield << "\n";
-
-        out.close();
     }
 
 }

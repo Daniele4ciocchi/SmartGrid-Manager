@@ -19,45 +19,46 @@ double ElectricityGrid::getPriceByTs(int ts) const
 {
     if (ts < 0 || ts >= static_cast<int>(prices.size()))
     {
-        return -1.0;
+        throw std::out_of_range("Timestamp fuori dai limiti");
     }
     return prices[ts];
 }
 
 void ElectricityGrid::addPriceLog(double prezzo_log)
 {
-    double last_log = prices_log.empty() ? 0.0 : prices_log.back();
-    prices_log.push_back(last_log + prezzo_log);
-    
-    int last_count = valid_prices_count.empty() ? 0 : valid_prices_count.back();
-    // prezzo_log non è 0 se prezzo > 0, oppure log(prezzo). Wait, checking price > 0 can be done by checking if we had price>0
-    // Actually, addPrice is always called just before addPriceLog, so we can use prices.back()
-    int is_valid = (!prices.empty() && prices.back() > 0.0) ? 1 : 0;
-    valid_prices_count.push_back(last_count + is_valid);
+    prices_log.push_back(prezzo_log);
+    if (prices_log_prefix.empty())
+    {
+        prices_log_prefix.push_back(prezzo_log);
+    }
+    else
+    {
+        prices_log_prefix.push_back(prices_log_prefix.back() + prezzo_log);
+    }
 }
 
-double ElectricityGrid::getPriceLogSum(int start, int end) const
+double ElectricityGrid::getPriceLogByTs(int ts) const
 {
-    if (start >= end) return 0.0;
-    double logSum = 0.0;
-    if (start == 0) {
-        logSum = prices_log[end - 1];
-    } else {
-        logSum = prices_log[end - 1] - prices_log[start - 1];
+    if (ts < 0 || ts >= static_cast<int>(prices_log.size()))
+    {
+        return -1.0; // nessun dato disponibile per questo timestamp
     }
-    return logSum;
+    return prices_log[ts];
 }
 
-int ElectricityGrid::getValidCount(int start, int end) const
+double ElectricityGrid::getLogSumRange(int start, int end) const
 {
-    if (start >= end) return 0;
-    int count = 0;
-    if (start == 0) {
-        count = valid_prices_count[end - 1];
-    } else {
-        count = valid_prices_count[end - 1] - valid_prices_count[start - 1];
-    }
-    return count;
+    if (start < 0 || end < start || end >= static_cast<int>(prices_log_prefix.size()))
+        throw std::out_of_range("Invalid range for log sum");
+
+    if (start == 0)
+        return prices_log_prefix[end];
+    return prices_log_prefix[end] - prices_log_prefix[start - 1];
+}
+
+int ElectricityGrid::getLogSize() const
+{
+    return static_cast<int>(prices_log.size());
 }
 
 

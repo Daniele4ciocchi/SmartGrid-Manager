@@ -1,0 +1,491 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ---------------------------------------------------------
+% PACCHETTI
+% ---------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{graphicx}
+\usepackage{float}
+
+\usepackage{booktabs}
+\usepackage{array}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage{geometry}
+\usepackage{setspace}
+
+\usepackage{hyperref}
+\usepackage{url}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+% ---------------------------------------------------------
+% IMPOSTAZIONE PAGINA
+% ---------------------------------------------------------
+
+\geometry{
+    a4paper,
+    left=3cm,
+    right=3cm,
+    top=3cm,
+    bottom=3cm
+}
+
+\onehalfspacing
+
+% ---------------------------------------------------------
+% HYPERREF
+% ---------------------------------------------------------
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue,
+    pdftitle={Titolo della tesi},
+    pdfauthor={Nome Cognome}
+}
+
+% ---------------------------------------------------------
+% CODICE
+% ---------------------------------------------------------
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    showstringspaces=false
+}
+
+% ---------------------------------------------------------
+% INFORMAZIONI TESI
+% ---------------------------------------------------------
+
+\newcommand{\thesistitle}{gestione della compra/vendita di energia }
+\newcommand{\authorname}{Daniele Quattrociocchi}
+\newcommand{\degree}{Laurea in Informatica}
+\newcommand{\supervisor}{Prof. Enrico Tronci}
+\newcommand{\academicyear}{2025--2026}
+
+% ---------------------------------------------------------
+% DOCUMENTO
+% ---------------------------------------------------------
+
+\begin{document}
+
+% =========================================================
+% FRONTESPIZIO
+% =========================================================
+
+\begin{titlepage}
+
+    \centering
+
+    % Inserire qui eventualmente il logo Sapienza
+    % \includegraphics[width=0.25\textwidth]{images/sapienza-logo.png}
+
+    \vspace*{1cm}
+
+    {\Large \textbf{SAPIENZA UNIVERSITÀ DI ROMA}\par}
+
+    \vspace{1cm}
+
+    {\large Facoltà di Ingegneria dell'Informazione, Informatica e Statistica\par}
+
+    \vspace{0.5cm}
+
+    {\large Corso di Laurea in Informatica\par}
+
+    \vspace{2.5cm}
+
+    {\LARGE \textbf{\thesistitle}\par}
+
+    \vspace{1.5cm}
+
+    {\large Tesi di Laurea\par}
+
+    \vfill
+
+    \begin{flushleft}
+        \large
+        \textbf{Relatore:} \supervisor
+
+        \vspace{0.5cm}
+
+        \textbf{Candidato:} \authorname
+    \end{flushleft}
+
+    \vspace{1cm}
+
+    {\large Anno Accademico \academicyear\par}
+
+\end{titlepage}
+
+
+% =========================================================
+% FRONT MATTER
+% =========================================================
+
+\pagenumbering{roman}
+
+% ---------------------------------------------------------
+% ABSTRACT
+% ---------------------------------------------------------
+
+\chapter*{Abstract}
+
+% L'abstract verrà scritto alla fine.
+% Massimo una pagina.
+
+Inserire qui l'abstract della tesi.
+
+\clearpage
+
+
+% ---------------------------------------------------------
+% INDICE
+% ---------------------------------------------------------
+
+\tableofcontents
+
+\clearpage
+
+
+% =========================================================
+% MAIN MATTER
+% =========================================================
+
+\pagenumbering{arabic}
+
+
+% =========================================================
+% 1. INTRODUCTION
+% =========================================================
+
+\chapter{Introduction}
+
+% Nota:
+% Il professore suggerisce di scrivere questo capitolo alla fine.
+
+\section{Context}
+
+Descrizione del contesto generale del problema.
+
+\section{Motivations}
+
+Motivazioni che hanno portato allo sviluppo del progetto.
+
+\section{Contributions}
+
+Descrizione dei contributi apportati dal lavoro.
+
+\section{Related Work}
+
+Descrizione dello stato dell'arte.
+
+% Esempio di citazione:
+% \cite{paper_example}
+
+\section{Outline}
+
+La tesi è organizzata come segue.
+Il Capitolo~\ref{chap:background} introduce il background necessario
+alla comprensione del lavoro.
+Il Capitolo~\ref{chap:methods} descrive i metodi utilizzati.
+Il Capitolo~\ref{chap:implementation} descrive l'implementazione.
+Il Capitolo~\ref{chap:results} presenta i risultati sperimentali.
+Infine, il Capitolo~\ref{chap:conclusions} presenta le conclusioni
+e i possibili sviluppi futuri.
+
+
+% =========================================================
+% 2. BACKGROUND
+% =========================================================
+
+\chapter{Background}
+\label{chap:background}
+
+% Inserire qui tutto il background necessario per comprendere
+% il progetto.
+
+\section{Background Topic 1}
+
+Descrizione del primo concetto necessario.
+
+\section{Background Topic 2}
+
+Descrizione del secondo concetto necessario.
+
+\section{Background Topic 3}
+
+Descrizione di eventuali algoritmi, tecnologie o strumenti.
+
+
+% =========================================================
+% 3. METHODS
+% =========================================================
+
+\chapter{Methods}
+\label{chap:methods}
+
+% Descrizione della progettazione del sistema.
+% NON inserire dettagli di implementazione o codice.
+
+\section{Problem Definition}
+
+Definizione formale o informale del problema affrontato.
+
+\section{Proposed Approach}
+
+Descrizione dell'approccio proposto.
+
+\section{System Design}
+
+Descrizione della progettazione generale del sistema.
+
+\section{Algorithms}
+
+Descrizione degli algoritmi utilizzati o progettati.
+
+% Esempio:
+%
+% \begin{equation}
+%     ...
+% \end{equation}
+
+
+% =========================================================
+% 4. IMPLEMENTATION
+% =========================================================
+
+\chapter{Implementation}
+\label{chap:implementation}
+
+% Descrizione dell'implementazione concreta.
+% Qui possono essere utilizzati pseudocodice e diagrammi.
+
+\section{System Architecture}
+
+Descrizione dell'architettura del sistema.
+
+% Esempio di figura:
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{images/architecture.png}
+%     \caption{Architettura del sistema.}
+%     \label{fig:architecture}
+% \end{figure}
+
+\section{Main Components}
+
+Descrizione dei principali componenti software.
+
+\section{Implementation Details}
+
+Descrizione delle principali scelte implementative.
+
+\section{Algorithms Implementation}
+
+Descrizione dell'implementazione degli algoritmi.
+
+% Esempio di codice:
+%
+% \begin{lstlisting}[language=C++, caption={Esempio di codice}]
+% int main() {
+%     return 0;
+% }
+% \end{lstlisting}
+
+
+% =========================================================
+% 5. EXPERIMENTAL RESULTS
+% =========================================================
+
+\chapter{Experimental Results}
+\label{chap:results}
+
+% Questa dovrebbe essere una delle sezioni più importanti
+% della tesi.
+
+\section{Goals}
+
+Descrizione degli obiettivi dell'attività sperimentale.
+
+Gli esperimenti sono stati progettati con l'obiettivo di valutare:
+
+\begin{itemize}
+    \item la correttezza dell'implementazione;
+    \item le prestazioni computazionali;
+    \item l'efficacia dell'approccio proposto.
+\end{itemize}
+
+
+% ---------------------------------------------------------
+% 5.2 SETTING
+% ---------------------------------------------------------
+
+\section{Experimental Setting}
+
+Descrizione dell'ambiente sperimentale.
+
+\subsection{Hardware}
+
+Descrizione dell'hardware utilizzato.
+
+\subsection{Software}
+
+Descrizione del software, delle librerie e delle versioni utilizzate.
+
+\subsection{Parameters}
+
+Descrizione dei parametri utilizzati negli esperimenti.
+
+
+% ---------------------------------------------------------
+% 5.3 CASE STUDIES
+% ---------------------------------------------------------
+
+\section{Case Studies}
+
+Descrizione dei casi di studio utilizzati.
+
+\subsection{Case Study 1}
+
+Descrizione del primo caso di studio.
+
+\subsection{Case Study 2}
+
+Descrizione del secondo caso di studio.
+
+
+% ---------------------------------------------------------
+% 5.4 CORRECTNESS
+% ---------------------------------------------------------
+
+\section{Correctness}
+
+Descrizione degli esperimenti utilizzati per verificare la correttezza
+dell'implementazione.
+
+\subsection{Correctness Tests}
+
+Descrizione dei test effettuati.
+
+\subsection{Results}
+
+Presentazione dei risultati relativi alla correttezza.
+
+
+% ---------------------------------------------------------
+% 5.5 COMPUTATIONAL EVALUATION
+% ---------------------------------------------------------
+
+\section{Computational Evaluation}
+
+Valutazione delle prestazioni computazionali.
+
+\subsection{Execution Time}
+
+Analisi dei tempi di esecuzione.
+
+\subsection{Memory Usage}
+
+Analisi dell'utilizzo della memoria.
+
+\subsection{CPU Usage}
+
+Analisi dell'utilizzo della CPU.
+
+
+% ---------------------------------------------------------
+% 5.6 TECHNICAL EVALUATION
+% ---------------------------------------------------------
+
+\section{Technical Evaluation}
+
+Valutazione dell'efficacia dell'approccio proposto.
+
+\subsection{Experimental Results}
+
+Presentazione dei risultati sperimentali.
+
+\subsection{Comparison}
+
+Confronto tra le diverse configurazioni o strategie.
+
+\subsection{Discussion}
+
+Discussione dei risultati ottenuti.
+
+
+% ---------------------------------------------------------
+% ESEMPIO DI TABELLA
+% ---------------------------------------------------------
+
+\begin{table}[H]
+    \centering
+    \caption{Esempio di risultati sperimentali.}
+    \label{tab:example-results}
+
+    \begin{tabular}{lrrr}
+        \toprule
+        Strategy & Average Yield & Standard Deviation & Final Gain \\
+        \midrule
+        Strategy A & 6.90\% & 10.08\% & 69.06 \\
+        Strategy B & 5.20\% & 8.30\% & 52.00 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+% ---------------------------------------------------------
+% ESEMPIO DI FIGURA
+% ---------------------------------------------------------
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/results.png}
+%     \caption{Risultati degli esperimenti.}
+%     \label{fig:results}
+% \end{figure}
+
+
+% =========================================================
+% 6. CONCLUSIONS
+% =========================================================
+
+\chapter{Conclusions}
+\label{chap:conclusions}
+
+Riassunto del lavoro svolto.
+
+\section{Summary}
+
+Sintesi degli obiettivi e del lavoro realizzato.
+
+\section{Future Developments}
+
+Possibili sviluppi futuri del progetto.
+
+
+% =========================================================
+% REFERENCES
+% =========================================================
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
