@@ -1,7 +1,7 @@
-PWD /home/daniele/project/SmartGrid-Manager
+PWD /mnt/volume/projects/SmartGrid-Manager/relazione
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT relazione.tex
+INPUT /mnt/volume/projects/SmartGrid-Manager/relazione/relazione.tex
 OUTPUT relazione.log
 INPUT /usr/share/texmf-dist/tex/latex/base/report.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/report.cls

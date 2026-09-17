@@ -174,31 +174,31 @@ Inserire qui l'abstract della tesi.
 % 1. INTRODUCTION
 % =========================================================
 
-\chapter{Introduction}
+\chapter{Introduzione}
 
 % Nota:
 % Il professore suggerisce di scrivere questo capitolo alla fine.
 
-\section{Context}
+\section{Contesto}
 
 Descrizione del contesto generale del problema.
 
-\section{Motivations}
+\section{Motivazioni}
 
 Motivazioni che hanno portato allo sviluppo del progetto.
 
-\section{Contributions}
+\section{Contributi}
 
 Descrizione dei contributi apportati dal lavoro.
 
-\section{Related Work}
+\section{Stato dell'arte}
 
 Descrizione dello stato dell'arte.
 
 % Esempio di citazione:
 % \cite{paper_example}
 
-\section{Outline}
+\section{Struttura della tesi}
 
 La tesi è organizzata come segue.
 Il Capitolo~\ref{chap:background} introduce il background necessario
@@ -214,21 +214,21 @@ e i possibili sviluppi futuri.
 % 2. BACKGROUND
 % =========================================================
 
-\chapter{Background}
+\chapter{Contesto teorico}
 \label{chap:background}
 
 % Inserire qui tutto il background necessario per comprendere
 % il progetto.
 
-\section{Background Topic 1}
+\section{Argomento teorico 1}
 
 Descrizione del primo concetto necessario.
 
-\section{Background Topic 2}
+\section{Argomento teorico 2}
 
 Descrizione del secondo concetto necessario.
 
-\section{Background Topic 3}
+\section{Argomento teorico 3}
 
 Descrizione di eventuali algoritmi, tecnologie o strumenti.
 
@@ -237,25 +237,25 @@ Descrizione di eventuali algoritmi, tecnologie o strumenti.
 % 3. METHODS
 % =========================================================
 
-\chapter{Methods}
+\chapter{Metodologia}
 \label{chap:methods}
 
 % Descrizione della progettazione del sistema.
 % NON inserire dettagli di implementazione o codice.
 
-\section{Problem Definition}
+\section{Definizione del problema}
 
 Definizione formale o informale del problema affrontato.
 
-\section{Proposed Approach}
+\section{Approccio proposto}
 
 Descrizione dell'approccio proposto.
 
-\section{System Design}
+\section{Progettazione del sistema}
 
 Descrizione della progettazione generale del sistema.
 
-\section{Algorithms}
+\section{Algoritmi}
 
 Descrizione degli algoritmi utilizzati o progettati.
 
@@ -270,13 +270,13 @@ Descrizione degli algoritmi utilizzati o progettati.
 % 4. IMPLEMENTATION
 % =========================================================
 
-\chapter{Implementation}
+\chapter{Implementazione}
 \label{chap:implementation}
 
 % Descrizione dell'implementazione concreta.
 % Qui possono essere utilizzati pseudocodice e diagrammi.
 
-\section{System Architecture}
+\section{Architettura del sistema}
 
 Descrizione dell'architettura del sistema.
 
@@ -289,15 +289,15 @@ Descrizione dell'architettura del sistema.
 %     \label{fig:architecture}
 % \end{figure}
 
-\section{Main Components}
+\section{Componenti principali}
 
 Descrizione dei principali componenti software.
 
-\section{Implementation Details}
+\section{Dettagli implementativi}
 
 Descrizione delle principali scelte implementative.
 
-\section{Algorithms Implementation}
+\section{Implementazione degli algoritmi}
 
 Descrizione dell'implementazione degli algoritmi.
 
@@ -314,30 +314,39 @@ Descrizione dell'implementazione degli algoritmi.
 % 5. EXPERIMENTAL RESULTS
 % =========================================================
 
-\chapter{Experimental Results}
+\chapter{Risultati sperimentali}
 \label{chap:results}
 
 % Questa dovrebbe essere una delle sezioni più importanti
 % della tesi.
 
-\section{Goals}
+\section{Obiettivi}
 
-Descrizione degli obiettivi dell'attività sperimentale.
+L'attività sperimentale ha l'obiettivo di valutare l'efficacia delle strategie
+di compravendita implementate nel simulatore. In particolare, il confronto
+principale riguarda la strategia \texttt{smartGeometricChoise} e la strategia
+\texttt{randomChoice}, utilizzata come baseline.
 
-Gli esperimenti sono stati progettati con l'obiettivo di valutare:
+Gli esperimenti sono stati progettati per:
 
 \begin{itemize}
-    \item la correttezza dell'implementazione;
-    \item le prestazioni computazionali;
-    \item l'efficacia dell'approccio proposto.
+    \item misurare il rendimento medio prodotto dalle due strategie;
+    \item analizzare la variabilità dei risultati tramite la deviazione standard;
+    \item studiare l'influenza dei principali parametri della strategia Smart;
+    \item verificare in quali configurazioni la strategia Smart migliora il
+          comportamento della baseline casuale.
 \end{itemize}
+
+Il rendimento medio non viene quindi considerato come unico criterio di
+valutazione: una strategia più redditizia, ma anche più variabile, deve essere
+interpretata tenendo conto del corrispondente aumento dell'incertezza.
 
 
 % ---------------------------------------------------------
 % 5.2 SETTING
 % ---------------------------------------------------------
 
-\section{Experimental Setting}
+\section{Configurazione sperimentale}
 
 Descrizione dell'ambiente sperimentale.
 
@@ -349,42 +358,83 @@ Descrizione dell'hardware utilizzato.
 
 Descrizione del software, delle librerie e delle versioni utilizzate.
 
-\subsection{Parameters}
+\subsection{Parametri}
 
-Descrizione dei parametri utilizzati negli esperimenti.
+I test sono stati eseguiti mantenendo fissi la durata della simulazione, il
+budget per operazione, il saldo iniziale e la soglia di vendita. Sono stati
+variati la finestra geometrica, la percentuale accantonata e la soglia di
+acquisto, secondo i valori riportati in Tabella~\ref{tab:experimental-parameters}.
+
+\begin{table}[H]
+    \centering
+    \caption{Parametri utilizzati nella campagna sperimentale.}
+    \label{tab:experimental-parameters}
+    \begin{tabular}{ll}
+        \toprule
+        Parametro & Valori considerati \\
+        \midrule
+        Finestra simulazione & 300 \\
+        Budget per operazione & 10 \\
+        Saldo iniziale & 1000 \\
+        Finestra geometrica & 10, 20, 50, 100 \\
+        Set Aside (\%) & 10, 20, 30, 50 \\
+        Buy Threshold & 0.9, 0.8, 0.7 \\
+        Sell Threshold & 1.0 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+La strategia \texttt{randomChoice} non utilizza la finestra geometrica né le
+soglie di acquisto e vendita per prendere le decisioni: per ogni rete e per
+ogni istante seleziona casualmente l'azione da eseguire. Per questo motivo non
+è metodologicamente corretto associare una singola riga Smart a una riga
+Random avente gli stessi valori di tutti i parametri. Random viene invece
+trattata come baseline, mentre i parametri specifici della strategia Smart
+sono analizzati separatamente.
 
 
 % ---------------------------------------------------------
 % 5.3 CASE STUDIES
 % ---------------------------------------------------------
 
-\section{Case Studies}
+\section{Casi di studio}
 
-Descrizione dei casi di studio utilizzati.
+I casi di studio sono costruiti a partire dalle combinazioni dei parametri
+riportati nella sezione precedente. Per ogni configurazione vengono raccolti
+il rendimento medio (\textit{Average Yield}), la deviazione standard e il
+guadagno finale medio.
 
-\subsection{Case Study 1}
+\subsection{Baseline casuale}
 
-Descrizione del primo caso di studio.
+La strategia \texttt{randomChoice} costituisce il riferimento sperimentale.
+Nel campione analizzato produce un rendimento medio compreso tra il 7,40\%
+e il 7,58\%, una deviazione standard prossima al 12\% e un guadagno finale
+medio compreso tra circa 74 e 76 unità monetarie. La variazione residua tra
+le configurazioni è compatibile con il carattere casuale della strategia e
+con l'effetto della percentuale accantonata.
 
-\subsection{Case Study 2}
+\subsection{Strategia Smart}
 
-Descrizione del secondo caso di studio.
+Per \texttt{smartGeometricChoise} sono state analizzate quattro finestre
+geometriche e tre soglie di acquisto. La percentuale accantonata è stata
+considerata come parametro secondario, poiché in diverse configurazioni il
+suo effetto sul rendimento risulta nullo o molto contenuto.
 
 
 % ---------------------------------------------------------
 % 5.4 CORRECTNESS
 % ---------------------------------------------------------
 
-\section{Correctness}
+\section{Correttezza}
 
 Descrizione degli esperimenti utilizzati per verificare la correttezza
 dell'implementazione.
 
-\subsection{Correctness Tests}
+\subsection{Test di correttezza}
 
 Descrizione dei test effettuati.
 
-\subsection{Results}
+\subsection{Risultati}
 
 Presentazione dei risultati relativi alla correttezza.
 
@@ -393,19 +443,19 @@ Presentazione dei risultati relativi alla correttezza.
 % 5.5 COMPUTATIONAL EVALUATION
 % ---------------------------------------------------------
 
-\section{Computational Evaluation}
+\section{Valutazione computazionale}
 
 Valutazione delle prestazioni computazionali.
 
-\subsection{Execution Time}
+\subsection{Tempo di esecuzione}
 
 Analisi dei tempi di esecuzione.
 
-\subsection{Memory Usage}
+\subsection{Utilizzo della memoria}
 
 Analisi dell'utilizzo della memoria.
 
-\subsection{CPU Usage}
+\subsection{Utilizzo della CPU}
 
 Analisi dell'utilizzo della CPU.
 
@@ -414,69 +464,108 @@ Analisi dell'utilizzo della CPU.
 % 5.6 TECHNICAL EVALUATION
 % ---------------------------------------------------------
 
-\section{Technical Evaluation}
+\section{Valutazione tecnica}
 
-Valutazione dell'efficacia dell'approccio proposto.
+La valutazione tecnica considera il rendimento e la sua variabilità per
+confrontare la strategia Smart con il comportamento della baseline casuale.
 
-\subsection{Experimental Results}
+\subsection{Risultati sperimentali}
 
-Presentazione dei risultati sperimentali.
-
-\subsection{Comparison}
-
-Confronto tra le diverse configurazioni o strategie.
-
-\subsection{Discussion}
-
-Discussione dei risultati ottenuti.
-
-
-% ---------------------------------------------------------
-% ESEMPIO DI TABELLA
-% ---------------------------------------------------------
+I risultati mostrano una forte dipendenza della strategia Smart dalla soglia
+di acquisto. Considerando, a titolo rappresentativo, una finestra geometrica
+pari a 20 e una percentuale accantonata pari al 10\%, si osserva il seguente
+andamento:
 
 \begin{table}[H]
     \centering
-    \caption{Esempio di risultati sperimentali.}
-    \label{tab:example-results}
-
+    \caption{Risultati rappresentativi per finestra geometrica pari a 20.}
+    \label{tab:smart-representative-results}
+    \resizebox{\textwidth}{!}{%
     \begin{tabular}{lrrr}
         \toprule
-        Strategy & Average Yield & Standard Deviation & Final Gain \\
+        Buy Threshold & Average Yield (\%) & Deviazione standard (\%) & Guadagno medio \\
         \midrule
-        Strategy A & 6.90\% & 10.08\% & 69.06 \\
-        Strategy B & 5.20\% & 8.30\% & 52.00 \\
+        0.9 & 5.64 & 9.83 & 56.36 \\
+        0.8 & 8.23 & 11.76 & 82.33 \\
+        0.7 & 10.77 & 13.21 & 107.69 \\
         \bottomrule
-    \end{tabular}
+    \end{tabular}%
+    }
 \end{table}
 
+Rispetto alla baseline, il rendimento della strategia Smart passa da valori
+inferiori a Random con soglia 0.9 a valori superiori con soglia 0.8 e 0.7.
+La configurazione più redditizia osservata nel campione è quella con finestra
+geometrica pari a 10 e Buy Threshold pari a 0.7: raggiunge un rendimento
+medio del 12,25\%, contro circa il 7,4\% della baseline.
 
-% ---------------------------------------------------------
-% ESEMPIO DI FIGURA
-% ---------------------------------------------------------
+\subsection{Confronto}
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/results.png}
-%     \caption{Risultati degli esperimenti.}
-%     \label{fig:results}
-% \end{figure}
+Il confronto viene effettuato mantenendo costanti i parametri comuni e
+considerando Random come valore di riferimento. Poiché Random non dipende
+dalla finestra geometrica e dalle soglie usate da Smart, il risultato corretto
+non è un confronto uno-a-uno tra configurazioni omonime, ma un confronto tra
+la baseline e l'insieme delle configurazioni Smart.
+
+La Tabella~\ref{tab:comparison-summary} riassume tre configurazioni Smart e
+la fascia di risultati osservata per Random.
+
+\begin{table}[H]
+    \centering
+    \caption{Confronto sintetico tra Random e alcune configurazioni Smart.}
+    \label{tab:comparison-summary}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lrrr}
+        \toprule
+        Configurazione & Average Yield (\%) & Deviazione standard (\%) & Guadagno medio \\
+        \midrule
+        Random (intervallo osservato) & 7.40--7.58 & 11.95--11.99 & 74.02--75.75 \\
+        Smart, geom. 20, buy 0.9 & 5.64 & 9.83 & 56.36 \\
+        Smart, geom. 20, buy 0.8 & 8.23 & 11.76 & 82.33 \\
+        Smart, geom. 20, buy 0.7 & 10.77 & 13.21 & 107.69 \\
+        \bottomrule
+    \end{tabular}%
+    }
+\end{table}
+
+\subsection{Discussione}
+
+Il confronto evidenzia che la strategia Smart non è uniformemente superiore
+alla strategia Random. Con Buy Threshold pari a 0.9, la baseline casuale
+ottiene un rendimento maggiore; riducendo la soglia a 0.8, Smart supera
+invece il rendimento medio di Random; con soglia 0.7 il vantaggio diventa più
+marcato.
+
+Anche la finestra geometrica influenza il risultato. Con Buy Threshold pari
+a 0.7, il rendimento passa dal 12,25\% con finestra 10 al 10,77\% con
+finestra 20, all'8,91\% con finestra 50 e al 7,37\% con finestra 100. Nel
+campione considerato, finestre più brevi sono quindi associate a rendimenti
+maggiori. Questo risultato è compatibile con una maggiore reattività alle
+variazioni recenti dei prezzi, ma tale interpretazione deve essere riferita
+alla configurazione e ai dati analizzati, senza essere generalizzata oltre
+l'esperimento.
+
+Il rendimento maggiore è accompagnato da una maggiore variabilità: la
+configurazione Smart migliore raggiunge una deviazione standard del 14,63\%,
+contro circa il 11,95\% osservato per Random. La scelta della strategia non
+dovrebbe quindi basarsi esclusivamente sul rendimento medio, ma sul rapporto
+tra rendimento ottenuto e variabilità dei risultati.
 
 
 % =========================================================
 % 6. CONCLUSIONS
 % =========================================================
 
-\chapter{Conclusions}
+\chapter{Conclusioni}
 \label{chap:conclusions}
 
 Riassunto del lavoro svolto.
 
-\section{Summary}
+\section{Sintesi}
 
 Sintesi degli obiettivi e del lavoro realizzato.
 
-\section{Future Developments}
+\section{Sviluppi futuri}
 
 Possibili sviluppi futuri del progetto.
 

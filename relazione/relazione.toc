@@ -1,45 +1,45 @@
 \babel@toc {italian}{}\relax 
 \babel@toc {italian}{}\relax 
-\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Context}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Motivations}{1}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Contributions}{1}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Related Work}{1}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Outline}{1}{section.1.5}%
-\contentsline {chapter}{\numberline {2}Background}{2}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Background Topic 1}{2}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Background Topic 2}{2}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Background Topic 3}{2}{section.2.3}%
-\contentsline {chapter}{\numberline {3}Methods}{3}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Problem Definition}{3}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Proposed Approach}{3}{section.3.2}%
-\contentsline {section}{\numberline {3.3}System Design}{3}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Algorithms}{3}{section.3.4}%
-\contentsline {chapter}{\numberline {4}Implementation}{4}{chapter.4}%
-\contentsline {section}{\numberline {4.1}System Architecture}{4}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Main Components}{4}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Implementation Details}{4}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Algorithms Implementation}{4}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Experimental Results}{5}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Goals}{5}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Experimental Setting}{5}{section.5.2}%
+\contentsline {chapter}{\numberline {1}Introduzione}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Contesto}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Motivazioni}{1}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Contributi}{1}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Stato dell'arte}{1}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Struttura della tesi}{1}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Contesto teorico}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Argomento teorico 1}{2}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Argomento teorico 2}{2}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Argomento teorico 3}{2}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Metodologia}{3}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Definizione del problema}{3}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Approccio proposto}{3}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Progettazione del sistema}{3}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Algoritmi}{3}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Implementazione}{4}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Architettura del sistema}{4}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Componenti principali}{4}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Dettagli implementativi}{4}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Implementazione degli algoritmi}{4}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Risultati sperimentali}{5}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Obiettivi}{5}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Configurazione sperimentale}{5}{section.5.2}%
 \contentsline {subsection}{\numberline {5.2.1}Hardware}{5}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Software}{5}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Parameters}{5}{subsection.5.2.3}%
-\contentsline {section}{\numberline {5.3}Case Studies}{6}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Case Study 1}{6}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Case Study 2}{6}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Correctness}{6}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Correctness Tests}{6}{subsection.5.4.1}%
-\contentsline {subsection}{\numberline {5.4.2}Results}{6}{subsection.5.4.2}%
-\contentsline {section}{\numberline {5.5}Computational Evaluation}{6}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}Execution Time}{6}{subsection.5.5.1}%
-\contentsline {subsection}{\numberline {5.5.2}Memory Usage}{6}{subsection.5.5.2}%
-\contentsline {subsection}{\numberline {5.5.3}CPU Usage}{6}{subsection.5.5.3}%
-\contentsline {section}{\numberline {5.6}Technical Evaluation}{7}{section.5.6}%
-\contentsline {subsection}{\numberline {5.6.1}Experimental Results}{7}{subsection.5.6.1}%
-\contentsline {subsection}{\numberline {5.6.2}Comparison}{7}{subsection.5.6.2}%
-\contentsline {subsection}{\numberline {5.6.3}Discussion}{7}{subsection.5.6.3}%
-\contentsline {chapter}{\numberline {6}Conclusions}{8}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Summary}{8}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Developments}{8}{section.6.2}%
+\contentsline {subsection}{\numberline {5.2.2}Software}{6}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Parametri}{6}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Casi di studio}{6}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Baseline casuale}{6}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Strategia Smart}{7}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Correttezza}{7}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Test di correttezza}{7}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Risultati}{7}{subsection.5.4.2}%
+\contentsline {section}{\numberline {5.5}Valutazione computazionale}{7}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Tempo di esecuzione}{7}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Utilizzo della memoria}{7}{subsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.5.3}Utilizzo della CPU}{7}{subsection.5.5.3}%
+\contentsline {section}{\numberline {5.6}Valutazione tecnica}{8}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}Risultati sperimentali}{8}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Confronto}{8}{subsection.5.6.2}%
+\contentsline {subsection}{\numberline {5.6.3}Discussione}{9}{subsection.5.6.3}%
+\contentsline {chapter}{\numberline {6}Conclusioni}{10}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Sintesi}{10}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Sviluppi futuri}{10}{section.6.2}%
