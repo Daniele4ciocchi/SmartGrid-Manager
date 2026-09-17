@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <stdexcept>
 
 // Definizione ed inizializzazione coi valori di default
 int WINDOW_SIZE = 300;
@@ -19,9 +20,19 @@ double SELL_THRESHOLD = 1.00;
 int MAX_BUY = 200; // massimo numero di acquisti per timestamp
 int MAX_SELL = 200; // massimo numero di vendite per timestamp
 
+static StrategyType parseStrategy(const std::string &value)
+{
+    if (value == "random") return StrategyType::Random;
+    if (value == "geometric") return StrategyType::Geometric;
+    if (value == "smart" || value == "smartGeometric") return StrategyType::SmartGeometric;
+
+    throw std::invalid_argument("strategia non valida: " + value + ". Valori ammessi: random, geometric, smart");
+}
+
 int main(int argc, char **argv)
 {
     // Parse argomenti opzionali per tuning dei test
+    StrategyType strategy = StrategyType::Geometric;
     for (int i = 1; i < argc; ++i)
     {
         std::string arg = argv[i];
@@ -32,6 +43,7 @@ int main(int argc, char **argv)
         else if (arg == "--window" && i + 1 < argc) WINDOW_SIZE = std::stoi(argv[++i]);
         else if (arg == "--wallet" && i + 1 < argc) WALLET_INITIAL_BALANCE = std::stod(argv[++i]);
         else if (arg == "--set-aside" && i + 1 < argc) SET_ASIDE_PERCENTAGE = std::stod(argv[++i]);
+        else if (arg == "--strategy" && i + 1 < argc) strategy = parseStrategy(argv[++i]);
     }
 
     // structures declarations
@@ -60,7 +72,7 @@ int main(int argc, char **argv)
     // simulatore
     if (runSimulator)
     {
-        Simulator simulator(db);
+        Simulator simulator(db, strategy);
         simulator.run();
     }
 

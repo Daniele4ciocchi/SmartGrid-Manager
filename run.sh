@@ -6,6 +6,7 @@ set -euo pipefail
 #   ./run.sh [--build] [--exe <path>] [--] [args...]
 # - --build : esegue ./build.sh prima di lanciare
 # - --exe <path> : percorso esplicito dell'eseguibile
+# - --strategy <nome> : strategia (random, geometric, smart)
 # - args... : argomenti passati all'eseguibile
 
 PROJ_ROOT="$(cd "$(dirname "${0}")" && pwd)"
@@ -22,6 +23,8 @@ while [[ ${#} -gt 0 ]]; do
       POSITIONAL+=("--initdb"); shift ;;
     --simulator)
       POSITIONAL+=("--simulator"); shift ;;
+    --strategy)
+      POSITIONAL+=("--strategy" "$2"); shift 2 ;;
     --exe)
       EXE_OVERRIDE="$2"; shift 2 ;;
     --)

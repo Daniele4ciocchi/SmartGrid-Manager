@@ -1,7 +1,7 @@
 #include "Simulator.h"
 #include <omp.h>
 
-Simulator::Simulator(Database &db) : db(db) {}
+Simulator::Simulator(Database &db, StrategyType strategy) : db(db), strategy(strategy) {}
 
 void Simulator::run()
 {
@@ -25,9 +25,18 @@ void Simulator::run()
                 // ciclo interno: finestra di WINDOW_SIZE (300) ts a partire da i
                 for (int j = i; j < i + WINDOW_SIZE; ++j)
                 {
-                    // randomChoise(reti, &w, &b, &tradingService, j);
-                    // geometricChoise(reti, &w, &b, &tradingService, j);
-                    smartgeometricChoise(reti, &w, &b, &tradingService, j);
+                    switch (strategy)
+                    {
+                    case StrategyType::Random:
+                        randomChoise(reti, &w, &b, &tradingService, j);
+                        break;
+                    case StrategyType::Geometric:
+                        geometricChoise(reti, &w, &b, &tradingService, j);
+                        break;
+                    case StrategyType::SmartGeometric:
+                        smartgeometricChoise(reti, &w, &b, &tradingService, j);
+                        break;
+                    }
                 }
 
                 // liquida tutte le posizioni al timestamp finale della finestra
@@ -58,6 +67,5 @@ void Simulator::run()
     std::cout << "range: " << (avgYield - stdDev) * 100 << "% - " << (avgYield + stdDev) * 100 << "%" << std::endl;
 
     // Registra i dati dell'esperimento
-    // Nota: modificare il nome della strategia in base a quella abilitata nel ciclo sopra
-    utils::logExperiment("smartGeometricChoise", avgYield, stdDev);
+    utils::logExperiment(strategyName(strategy), avgYield, stdDev);
 }

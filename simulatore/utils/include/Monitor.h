@@ -46,6 +46,6 @@ namespace monitor
      * @return La deviazione standard dei rendimenti.
      */
     double calculateStandardDeviation();
+}
 
 #endif
-}

@@ -16,6 +16,15 @@
 #include <iomanip>
 #include <set>
 
+enum class StrategyType
+{
+	Random,
+	Geometric,
+	SmartGeometric
+};
+
+const char *strategyName(StrategyType strategy);
+
 
 /**
  * @brief Funzione che implementa una strategia di scelta casuale per l'acquisto e la vendita di energia.

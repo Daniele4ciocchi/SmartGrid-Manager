@@ -2,6 +2,21 @@
 #include <stdexcept>
 #include <algorithm>
 
+const char *strategyName(StrategyType strategy)
+{
+    switch (strategy)
+    {
+    case StrategyType::Random:
+        return "randomChoise";
+    case StrategyType::Geometric:
+        return "geometricChoise";
+    case StrategyType::SmartGeometric:
+        return "smartgeometricChoise";
+    }
+
+    return "unknown";
+}
+
 void randomChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, TradingService *ts, int j)
 {
     thread_local std::mt19937 gen(std::random_device{}());
@@ -29,7 +44,7 @@ void randomChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, Tra
 
 void geometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, TradingService *ts, int j)
 {
-    if (j <= GEOMETRIC_WINDOW)
+    if (j < GEOMETRIC_WINDOW)
         return;
 
     for (ElectricityGrid &r : reti)
@@ -56,7 +71,7 @@ void geometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, 
 
 void smartgeometricChoise(std::vector<ElectricityGrid> &reti, Wallet *w, Battery *b, TradingService *ts, int j)
 {
-    if (j <= GEOMETRIC_WINDOW)
+    if (j < GEOMETRIC_WINDOW)
         return;
 
     std::set<std::pair<double, ElectricityGrid *>> geometricValues;

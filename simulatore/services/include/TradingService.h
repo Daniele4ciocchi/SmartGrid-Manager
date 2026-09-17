@@ -2,6 +2,7 @@
 #define TRADINGSERVICE_H
 
 #include <vector>
+#include <map>
 #include "Transaction.h"
 #include "Battery.h"
 #include "Wallet.h"

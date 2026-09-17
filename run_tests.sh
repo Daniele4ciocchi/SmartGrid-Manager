@@ -1,5 +1,16 @@
 #!/bin/bash
 
+set -euo pipefail
+
+STRATEGY="${1:-geometric}"
+case "$STRATEGY" in
+    random|geometric|smart) ;;
+    *)
+        echo "Uso: $0 [random|geometric|smart]" >&2
+        exit 2
+        ;;
+esac
+
 # Compila il progetto
 echo "Compilazione in corso..."
 cd build || exit
@@ -21,8 +32,8 @@ for b in "${BUDGET_VALS[@]}"; do
             for sell in "${SELL_VALS[@]}"; do
                 for sa in "${SET_ASIDE_VALS[@]}"; do
                     echo "=========================================================="
-                    echo "Esecuzione test con: Budget=${b}, BuyTH=${buy}, SellTH=${sell}, Geom=${g}, SetAside=${sa}"
-                    ./build/simulatore/main/simulatore --budget $b --buy $buy --sell $sell --geom $g --set-aside $sa --simulator
+                    echo "Esecuzione test con: Strategy=${STRATEGY}, Budget=${b}, BuyTH=${buy}, SellTH=${sell}, Geom=${g}, SetAside=${sa}"
+                    ./build/simulatore/main/simulatore --strategy "$STRATEGY" --budget "$b" --buy "$buy" --sell "$sell" --geom "$g" --set-aside "$sa" --simulator
                 done
             done
         done

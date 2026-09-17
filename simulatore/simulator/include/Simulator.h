@@ -15,11 +15,12 @@
 
 class Simulator {
 public:
-    Simulator(Database& db);
+    Simulator(Database& db, StrategyType strategy);
     void run();
 
 private:
     Database& db;
+    StrategyType strategy;
 };
 
 #endif // SIMULATOR_H

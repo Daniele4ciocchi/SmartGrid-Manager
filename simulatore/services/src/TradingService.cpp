@@ -83,8 +83,12 @@ void TradingService::sellAll(std::vector<ElectricityGrid> *grids, Wallet *w, Bat
                 
             if (current_ts >= 0)
             {
-                sell(source, w, b, quantity * grid.getPriceByTs(current_ts), grid.getPriceByTs(current_ts));
-                sourceQuantity[source] = 0;
+                double price = grid.getPriceByTs(current_ts);
+                if (canSell(source, w, b, quantity * price, price))
+                {
+                    sell(source, w, b, quantity * price, price);
+                    sourceQuantity[source] = 0;
+                }
             }
         }
     }

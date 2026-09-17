@@ -7,6 +7,10 @@ to build and start the simulator you can run this command in the main directory
 
 ./run.sh --build
 
+## Documentazione tecnica
+
+La documentazione accademica delle classi, dei servizi, delle strategie e del flusso di simulazione è disponibile in [simulatore_documentation/README.md](simulatore_documentation/README.md).
+
 ## random choice 
 prende valori a caso e casualmente sul momento decide se vendere o comprare valori casuali di energia, il profitto medio di questa funzione si trova sui 3000 €
 
