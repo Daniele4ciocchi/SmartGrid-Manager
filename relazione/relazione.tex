@@ -73,7 +73,7 @@
 % INFORMAZIONI TESI
 % ---------------------------------------------------------
 
-\newcommand{\thesistitle}{gestione della compra/vendita di energia }
+\newcommand{\thesistitle}{Gestione della compravendita di energia}
 \newcommand{\authorname}{Daniele Quattrociocchi}
 \newcommand{\degree}{Laurea in Informatica}
 \newcommand{\supervisor}{Prof. Enrico Tronci}
@@ -149,7 +149,15 @@
 % L'abstract verrà scritto alla fine.
 % Massimo una pagina.
 
-Inserire qui l'abstract della tesi.
+La presente tesi analizza la possibilità di ottenere un rendimento superiore a
+quello di una strategia casuale nella compravendita di energia elettrica. A
+questo scopo è stato sviluppato un simulatore in C++ che esegue esperimenti su
+serie storiche di prezzi e confronta due strategie decisionali. La
+strategia casuale costituisce la baseline, mentre la strategia
+\texttt{smartgeometricChoise} utilizza la media geometrica dei prezzi storici
+per selezionare le reti elettriche sulle quali effettuare le operazioni. Il
+confronto viene condotto considerando il rendimento medio e la deviazione
+standard ottenuti su numerose finestre temporali di simulazione.
 
 \clearpage
 
@@ -181,19 +189,43 @@ Inserire qui l'abstract della tesi.
 
 \section{Contesto}
 
-Descrizione del contesto generale del problema.
+Il lavoro si colloca nell'ambito della simulazione di strategie per la
+compravendita di energia elettrica. Il sistema sviluppato gestisce i dati
+storici dei prezzi, configura gli esperimenti, esegue le simulazioni e
+calcola statistiche aggregate sui rendimenti ottenuti. Ogni simulazione
+modella inoltre lo stato di un portafoglio virtuale e di una batteria per
+rappresentare, rispettivamente, le risorse economiche e l'energia acquistata.
 
 \section{Motivazioni}
 
-Motivazioni che hanno portato allo sviluppo del progetto.
+La motivazione principale del progetto è verificare se una strategia basata su
+informazioni storiche possa migliorare il rendimento rispetto a una strategia
+casuale. Il confronto non riguarda soltanto il rendimento medio, ma anche la
+variabilità dei risultati, così da valutare il compromesso tra guadagno e
+incertezza.
 
 \section{Contributi}
 
-Descrizione dei contributi apportati dal lavoro.
+I principali contributi del lavoro sono:
+\begin{itemize}
+    \item la progettazione e l'implementazione di un simulatore per la
+        compravendita di energia su più reti elettriche;
+    \item la modellazione dei principali elementi del dominio, tra cui
+        batteria, portafoglio, transazioni e rete elettrica;
+    \item l'implementazione e il confronto di strategie casuali e basate sulla
+        media geometrica dei prezzi storici;
+    \item la definizione di una campagna sperimentale per analizzare il
+        rendimento medio e la sua variabilità al variare dei parametri.
+\end{itemize}
 
 \section{Stato dell'arte}
 
-Descrizione dello stato dell'arte.
+Lo stato dell'arte e i riferimenti bibliografici relativi alle strategie di
+compravendita e all'uso di medie mobili saranno approfonditi nella versione
+finale della tesi. In questa prima stesura, il lavoro viene presentato come
+uno studio sperimentale interno al simulatore: i risultati permettono di
+valutare il comportamento delle strategie sui dati disponibili, ma non
+costituiscono una previsione dell'andamento reale del mercato elettrico.
 
 % Esempio di citazione:
 % \cite{paper_example}
@@ -201,8 +233,8 @@ Descrizione dello stato dell'arte.
 \section{Struttura della tesi}
 
 La tesi è organizzata come segue.
-Il Capitolo~\ref{chap:background} introduce il background necessario
-alla comprensione del lavoro.
+Il Capitolo~\ref{chap:background} introduce il modello del dominio e i
+concetti necessari alla comprensione del lavoro.
 Il Capitolo~\ref{chap:methods} descrive i metodi utilizzati.
 Il Capitolo~\ref{chap:implementation} descrive l'implementazione.
 Il Capitolo~\ref{chap:results} presenta i risultati sperimentali.
@@ -218,20 +250,58 @@ e i possibili sviluppi futuri.
 \label{chap:background}
 
 % Inserire qui tutto il background necessario per comprendere
-% il progetto.
+% il progetto. 
 
-\section{Argomento teorico 1}
+Il progetto è stato organizzato secondo una suddivisione in moduli, con
+l'obiettivo di separare il modello del dominio, la logica delle operazioni,
+la persistenza dei dati e l'esecuzione delle simulazioni. Ogni componente ha
+una responsabilità specifica; nelle sezioni successive vengono descritti gli
+elementi principali del sistema.
 
-Descrizione del primo concetto necessario.
+\section{Batteria}
 
-\section{Argomento teorico 2}
+La batteria rappresenta l'energia acquistata e conservata durante una
+simulazione. La classe mantiene la capacità massima e il livello corrente di
+energia e mette a disposizione le operazioni di carica e scarica. Un acquisto
+è consentito soltanto quando lo spazio disponibile è sufficiente, mentre una
+vendita richiede che la batteria contenga una quantità adeguata di energia.
 
-Descrizione del secondo concetto necessario.
+\section{Rete elettrica}
 
-\section{Argomento teorico 3}
+La rete elettrica memorizza la sequenza temporale dei prezzi associati a una
+specifica sorgente. I prezzi possono essere recuperati tramite il relativo
+timestamp. Per rendere più efficiente il calcolo della media geometrica,
+insieme ai prezzi vengono mantenute le somme prefisse dei loro logaritmi e il
+conteggio dei prezzi validi.
 
-Descrizione di eventuali algoritmi, tecnologie o strumenti.
+\section{Portafoglio}
 
+Il portafoglio gestisce le risorse economiche della simulazione. Esso
+mantiene separati il saldo disponibile, utilizzabile per nuovi acquisti, e il
+saldo accantonato. Il saldo totale, utilizzato per calcolare il rendimento
+finale, è dato dalla somma delle due componenti. Quando viene registrata una
+vendita, una percentuale del ricavo viene accantonata secondo il parametro
+\texttt{SET\_ASIDE\_PERCENTAGE}.
+
+\section{Strategie}
+
+Il confronto considerato in questa tesi riguarda due strategie: una baseline
+casuale e una strategia informata, denominata SmartGeometric. Quest'ultima
+utilizza il rapporto tra il prezzo corrente e la media geometrica di una
+finestra di prezzi storici e applica una selezione ordinata tra le diverse reti
+elettriche.
+
+\begin{itemize}
+        \item \texttt{randomChoise}: a ogni timestamp seleziona casualmente,
+            con probabilità uniforme, una delle azioni disponibili: non operare,
+            acquistare o vendere. Le operazioni vengono comunque eseguite solo
+            quando il portafoglio e la batteria rispettano i vincoli necessari;
+        \item \texttt{smartgeometricChoise}: ordina le reti in base al rapporto
+            prezzo/media geometrica, privilegiando gli acquisti sulle reti con
+            rapporto più basso e le vendite su quelle con rapporto più alto,
+            nel rispetto dei limiti massimi di acquisto e vendita.
+
+\end{itemize}
 
 % =========================================================
 % 3. METHODS
@@ -245,19 +315,62 @@ Descrizione di eventuali algoritmi, tecnologie o strumenti.
 
 \section{Definizione del problema}
 
-Definizione formale o informale del problema affrontato.
+Il problema affrontato consiste nel valutare se una strategia basata sui
+prezzi storici possa ottenere risultati migliori rispetto a una strategia
+casuale nella compravendita di energia elettrica.
+
 
 \section{Approccio proposto}
 
-Descrizione dell'approccio proposto.
+L'approccio adottato consiste nel confrontare una strategia casuale con una
+strategia informata dai prezzi storici. Per ogni rete elettrica e timestamp
+viene calcolato il rapporto tra il prezzo corrente e la media geometrica di una
+finestra storica. Un rapporto basso indica un prezzo relativamente conveniente
+per l'acquisto, mentre un rapporto alto indica una condizione favorevole alla
+vendita. La strategia Smart ordina inoltre le reti secondo questo rapporto e
+seleziona le opportunità migliori, rispettando i vincoli del portafoglio e
+della batteria.
 
 \section{Progettazione del sistema}
 
-Descrizione della progettazione generale del sistema.
+Il sistema è organizzato in quattro livelli principali. Il modulo di
+persistenza importa i prezzi da un file CSV e li salva in un database SQLite.
+Il modello del dominio rappresenta reti elettriche, batteria, portafoglio e
+transazioni. Il servizio di trading applica le regole che rendono valida una
+operazione. Infine, il simulatore coordina le finestre temporali, invoca la
+strategia scelta e raccoglie i rendimenti.
+
+Questa separazione consente di modificare la strategia senza alterare il
+modello dello stato finanziario ed energetico. Inoltre, ogni finestra utilizza
+un portafoglio, una batteria e un servizio di trading indipendenti, evitando
+che lo stato di una simulazione influenzi le altre.
 
 \section{Algoritmi}
 
-Descrizione degli algoritmi utilizzati o progettati.
+Il rendimento di una finestra è definito come
+
+\begin{equation}
+    Y = \frac{B_f - B_0}{B_0},
+\end{equation}
+
+dove $B_0$ è il saldo iniziale e $B_f$ è il saldo totale al termine della
+finestra, ottenuto sommando il saldo disponibile e quello accantonato.
+
+La media geometrica utilizzata dalla strategia è calcolata come
+
+\begin{equation}
+    G = \exp\left(\frac{1}{n}\sum_{k=1}^{n}\log p_k\right),
+\end{equation}
+
+dove $p_k$ sono i prezzi validi nella finestra storica e $n$ è il loro numero.
+Indicando con $p$ il prezzo corrente, la decisione è basata sul rapporto
+$r=p/G$: si acquista quando $r$ è inferiore alla soglia di acquisto e si vende
+quando $r$ è superiore alla soglia di vendita.
+
+La strategia casuale seleziona uniformemente tra nessuna operazione,
+acquisto e vendita. La strategia SmartGeometric ordina invece i rapporti
+calcolati per le diverse reti e privilegia gli acquisti con rapporto minore e
+le vendite con rapporto maggiore.
 
 % Esempio:
 %
@@ -278,7 +391,17 @@ Descrizione degli algoritmi utilizzati o progettati.
 
 \section{Architettura del sistema}
 
-Descrizione dell'architettura del sistema.
+Il punto di ingresso è il programma principale, che interpreta i parametri
+passati dalla riga di comando, inizializza il database e seleziona la
+strategia. Il componente \texttt{Simulator} carica le reti elettriche e
+coordina l'esecuzione. Per ogni finestra crea gli oggetti \texttt{Wallet},
+\texttt{Battery} e \texttt{TradingService}; quest'ultimo esegue le
+operazioni richieste dalla strategia.
+
+Al termine della finestra, le posizioni residue vengono liquidate all'ultimo
+prezzo valido disponibile. Il rendimento viene quindi aggiunto al monitor
+statistico, che calcola media e deviazione standard e registra i risultati
+degli esperimenti.
 
 % Esempio di figura:
 %
@@ -291,15 +414,45 @@ Descrizione dell'architettura del sistema.
 
 \section{Componenti principali}
 
-Descrizione dei principali componenti software.
+I componenti principali sono:
+\begin{itemize}
+    \item \texttt{Database}, responsabile dell'accesso al database SQLite;
+    \item \texttt{ElectricityGrid}, che conserva i prezzi di una rete e le
+        strutture necessarie al calcolo della media geometrica;
+    \item \texttt{Wallet} e \texttt{Battery}, che modellano rispettivamente
+        il capitale e l'energia disponibili;
+    \item \texttt{TradingService}, che verifica ed esegue acquisti e vendite;
+    \item \texttt{Simulator}, che coordina le finestre temporali e il
+        parallelismo;
+    \item il modulo \texttt{monitor}, che raccoglie i rendimenti e calcola le
+        statistiche aggregate.
+\end{itemize}
 
 \section{Dettagli implementativi}
 
-Descrizione delle principali scelte implementative.
+I dati dei prezzi vengono caricati dal database e ricostruiti in memoria come
+un vettore di oggetti \texttt{ElectricityGrid}. Le somme prefisse dei
+logaritmi permettono di calcolare la somma su una finestra in tempo costante,
+riducendo il costo del calcolo ripetuto della media geometrica.
+
+Il ciclo esterno sulle finestre temporali è parallelizzato con OpenMP. Le
+strutture mutabili della singola simulazione sono locali al thread, mentre
+l'inserimento dei rendimenti nel vettore condiviso del monitor è protetto da
+una sezione critica.
 
 \section{Implementazione degli algoritmi}
 
-Descrizione dell'implementazione degli algoritmi.
+Durante ogni timestamp la strategia legge il prezzo corrente di ciascuna
+rete. I prezzi non validi vengono ignorati. Per la strategia Smart, i rapporti
+prezzo/media vengono inseriti in una struttura ordinata; il primo passaggio
+considera le reti dal rapporto più basso e il secondo le percorre in ordine
+inverso. Prima di ogni operazione, il \texttt{TradingService} verifica che il
+portafoglio disponga del budget richiesto, che la batteria abbia spazio per un
+acquisto e che contenga energia sufficiente per una vendita.
+
+Al termine della finestra, \texttt{sellAll} chiude le posizioni ancora aperte.
+In questo modo il rendimento comprende sia il saldo disponibile sia il valore
+realizzato dalla liquidazione dell'energia residua.
 
 % Esempio di codice:
 %
@@ -327,6 +480,10 @@ di compravendita implementate nel simulatore. In particolare, il confronto
 principale riguarda la strategia \texttt{smartGeometricChoise} e la strategia
 \texttt{randomChoice}, utilizzata come baseline.
 
+Le due strategie adottano approcci differenti: la strategia
+\texttt{smartgeometricChoise} utilizza informazioni ricavate dai prezzi
+storici, mentre la strategia \texttt{randomChoise} si basa su scelte casuali.
+
 Gli esperimenti sono stati progettati per:
 
 \begin{itemize}
@@ -348,15 +505,31 @@ interpretata tenendo conto del corrispondente aumento dell'incertezza.
 
 \section{Configurazione sperimentale}
 
-Descrizione dell'ambiente sperimentale.
+La campagna sperimentale è stata eseguita sul simulatore compilato in
+ambiente locale. I prezzi sono stati caricati nel database SQLite a partire
+dal file di dati e ogni configurazione è stata eseguita su finestre temporali
+di 300 timestamp. Il confronto utilizza la stessa durata, lo stesso saldo
+iniziale e lo stesso budget per operazione, variando soltanto i parametri
+oggetto dell'analisi.
 
 \subsection{Hardware}
 
-Descrizione dell'hardware utilizzato.
+Per gli esperimenti è stato utilizzato un computer locale con:
+\begin{itemize}
+    \item 16 GB di RAM;
+    \item processore Intel Core i7-9700;
+\end{itemize}
+
+Sono riportate soltanto le caratteristiche considerate rilevanti per
+l'esecuzione degli esperimenti.
 
 \subsection{Software}
 
-Descrizione del software, delle librerie e delle versioni utilizzate.
+Il simulatore utilizza le seguenti librerie e tecnologie esterne:
+\begin{itemize}
+    \item \texttt{SQLite} per la gestione del database interno;
+    \item \texttt{OpenMP} per la parallelizzazione delle simulazioni.
+\end{itemize}
 
 \subsection{Parametri}
 
@@ -384,7 +557,7 @@ acquisto, secondo i valori riportati in Tabella~\ref{tab:experimental-parameters
     \end{tabular}
 \end{table}
 
-La strategia \texttt{randomChoice} non utilizza la finestra geometrica né le
+La strategia \texttt{randomChoise} non utilizza la finestra geometrica né le
 soglie di acquisto e vendita per prendere le decisioni: per ogni rete e per
 ogni istante seleziona casualmente l'azione da eseguire. Per questo motivo non
 è metodologicamente corretto associare una singola riga Smart a una riga
@@ -394,7 +567,7 @@ sono analizzati separatamente.
 
 
 % ---------------------------------------------------------
-% 5.3 CASE STUDIES
+% 5.3  CASI DI STUDIO  
 % ---------------------------------------------------------
 
 \section{Casi di studio}
@@ -406,62 +579,90 @@ guadagno finale medio.
 
 \subsection{Baseline casuale}
 
-La strategia \texttt{randomChoice} costituisce il riferimento sperimentale.
+La strategia \texttt{randomChoise} costituisce il riferimento sperimentale.
 Nel campione analizzato produce un rendimento medio compreso tra il 7,40\%
 e il 7,58\%, una deviazione standard prossima al 12\% e un guadagno finale
 medio compreso tra circa 74 e 76 unità monetarie. La variazione residua tra
 le configurazioni è compatibile con il carattere casuale della strategia e
 con l'effetto della percentuale accantonata.
 
-\subsection{Strategia Smart}
+\subsection{Strategia Smart} %da rivedere
 
-Per \texttt{smartGeometricChoise} sono state analizzate quattro finestre
+Per \texttt{smartgeometricChoise} sono state analizzate quattro finestre
 geometriche e tre soglie di acquisto. La percentuale accantonata è stata
 considerata come parametro secondario, poiché in diverse configurazioni il
 suo effetto sul rendimento risulta nullo o molto contenuto.
 
 
 % ---------------------------------------------------------
-% 5.4 CORRECTNESS
+% 5.4 CORRETTEZZA
 % ---------------------------------------------------------
 
 \section{Correttezza}
 
-Descrizione degli esperimenti utilizzati per verificare la correttezza
-dell'implementazione.
+La correttezza è stata valutata verificando separatamente le invarianti del
+modello e il comportamento complessivo del simulatore. In particolare, un
+acquisto non deve ridurre il saldo disponibile sotto zero né superare la
+capacità della batteria; una vendita non deve utilizzare energia non presente
+nella batteria o non associata alla rete interessata. Al termine di ogni
+finestra, inoltre, le posizioni residue devono essere liquidate prima del
+calcolo del rendimento.
 
 \subsection{Test di correttezza}
 
-Descrizione dei test effettuati.
+I test vengono eseguiti tramite gli script del progetto, che compilano il
+simulatore e lanciano combinazioni delle due strategie e dei relativi
+parametri. La verifica comprende la strategia casuale e la strategia
+SmartGeometric, oltre alla variazione della finestra geometrica, della soglia
+di acquisto e della percentuale accantonata. Per ogni esecuzione si controlla
+che il programma termini correttamente e che produca rendimento medio,
+deviazione standard e guadagno finale.
 
 \subsection{Risultati}
 
-Presentazione dei risultati relativi alla correttezza.
+Non sono state osservate condizioni di saldo o capacità non valide nelle
+esecuzioni considerate. I risultati vengono registrati nel file CSV degli
+esperimenti insieme ai parametri utilizzati, rendendo possibile la
+riproduzione e il controllo delle singole configurazioni.
 
 
 % ---------------------------------------------------------
-% 5.5 COMPUTATIONAL EVALUATION
+% 5.5  VALUTAZIONE COMPUTAZIONALE
 % ---------------------------------------------------------
 
 \section{Valutazione computazionale}
 
-Valutazione delle prestazioni computazionali.
+La valutazione computazionale riguarda il costo dell'esecuzione e l'effetto
+del parallelismo sulle finestre temporali. Il tempo complessivo dipende dal
+numero di finestre, dalla durata di ciascuna finestra e dal numero di reti
+elettriche analizzate. Il calcolo della media geometrica utilizza somme
+prefisse, mentre il ciclo sulle finestre è parallelizzato con OpenMP.
 
 \subsection{Tempo di esecuzione}
 
-Analisi dei tempi di esecuzione.
+I tempi di esecuzione devono essere misurati mantenendo fissi i dati e la
+configurazione, variando soltanto il numero di thread OpenMP. Per ogni
+configurazione è opportuno eseguire più ripetizioni e riportare il tempo
+medio, così da ridurre l'effetto del carico momentaneo del sistema.
 
 \subsection{Utilizzo della memoria}
 
-Analisi dell'utilizzo della memoria.
+L'utilizzo della memoria è determinato principalmente dai prezzi caricati in
+memoria, dalle strutture ausiliarie per le somme prefisse e dagli oggetti
+locali creati per ogni finestra. Poiché i dati delle reti sono condivisi in
+sola lettura, il parallelismo non richiede una copia completa dei prezzi per
+ogni thread.
 
 \subsection{Utilizzo della CPU}
 
-Analisi dell'utilizzo della CPU.
+L'utilizzo della CPU deve essere osservato insieme al numero di thread. Un
+aumento dell'utilizzo durante il ciclo sulle finestre è atteso, mentre il
+guadagno effettivo deve essere valutato confrontando il tempo di esecuzione
+con la versione a thread singolo.
 
 
 % ---------------------------------------------------------
-% 5.6 TECHNICAL EVALUATION
+% 5.6  VALUTAZIONE TECNICA
 % ---------------------------------------------------------
 
 \section{Valutazione tecnica}
@@ -559,15 +760,37 @@ tra rendimento ottenuto e variabilità dei risultati.
 \chapter{Conclusioni}
 \label{chap:conclusions}
 
-Riassunto del lavoro svolto.
+Il lavoro ha portato alla realizzazione di un simulatore per lo studio di
+strategie di compravendita di energia elettrica su serie storiche di prezzi.
+Il sistema separa il caricamento dei dati, il modello del dominio, la logica
+di trading e l'esecuzione delle simulazioni, permettendo di confrontare
+strategie diverse con gli stessi vincoli economici ed energetici.
 
 \section{Sintesi}
 
-Sintesi degli obiettivi e del lavoro realizzato.
+L'obiettivo principale era verificare se una strategia basata sulla media
+geometrica potesse superare una baseline casuale. I risultati mostrano che la
+strategia Smart può ottenere rendimenti medi superiori in alcune
+configurazioni, in particolare con soglie di acquisto più permissive, ma il
+vantaggio è accompagnato da una maggiore variabilità. Di conseguenza, i dati
+non supportano l'idea di una strategia sempre migliore: l'efficacia dipende
+dai parametri e dalle serie storiche considerate.
 
 \section{Sviluppi futuri}
 
-Possibili sviluppi futuri del progetto.
+Tra i possibili sviluppi futuri rientrano:
+\begin{itemize}
+    \item l'estensione dell'analisi delle strategie considerate e l'impiego di
+        ulteriori indicatori statistici;
+    \item la valutazione su dataset più ampi e diversificati;
+    \item l'introduzione di procedure automatiche per la scelta dei
+        parametri, evitando di selezionare la configurazione migliore sugli
+        stessi dati usati per la valutazione;
+    \item la raccolta sistematica dei tempi di esecuzione e dell'uso della
+        memoria al variare del numero di thread;
+    \item l'aggiunta di test automatici per le invarianti di batteria,
+        portafoglio e servizio di trading.
+\end{itemize}
 
 
 % =========================================================
