@@ -29,6 +29,9 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
 % ---------------------------------------------------------
 % IMPOSTAZIONE PAGINA
 % ---------------------------------------------------------
@@ -73,7 +76,7 @@
 % INFORMAZIONI TESI
 % ---------------------------------------------------------
 
-\newcommand{\thesistitle}{Gestione della compravendita di energia}
+\newcommand{\thesistitle}{Algoritmi per energy trading}
 \newcommand{\authorname}{Daniele Quattrociocchi}
 \newcommand{\degree}{Laurea in Informatica}
 \newcommand{\supervisor}{Prof. Enrico Tronci}
@@ -93,8 +96,11 @@
 
     \centering
 
-    % Inserire qui eventualmente il logo Sapienza
-    % \includegraphics[width=0.25\textwidth]{images/sapienza-logo.png}
+    \IfFileExists{relazione/immagini/sapthesis/sapienzalogo.pdf}{%
+        \includegraphics[width=0.28\textwidth]{relazione/immagini/sapthesis/sapienzalogo.pdf}%
+    }{%
+        \includegraphics[width=0.28\textwidth]{immagini/sapthesis/sapienzalogo.pdf}%
+    }
 
     \vspace*{1cm}
 
@@ -114,7 +120,7 @@
 
     \vspace{1.5cm}
 
-    {\large Tesi di Laurea\par}
+    {\large Relazione di Tirocinio\par}
 
     \vfill
 
@@ -148,16 +154,20 @@
 
 % L'abstract verrà scritto alla fine.
 % Massimo una pagina.
-
-La presente tesi analizza la possibilità di ottenere un rendimento superiore a
-quello di una strategia casuale nella compravendita di energia elettrica. A
-questo scopo è stato sviluppato un simulatore in C++ che esegue esperimenti su
-serie storiche di prezzi e confronta due strategie decisionali. La
-strategia casuale costituisce la baseline, mentre la strategia
-\texttt{smartgeometricChoise} utilizza la media geometrica dei prezzi storici
-per selezionare le reti elettriche sulle quali effettuare le operazioni. Il
-confronto viene condotto considerando il rendimento medio e la deviazione
-standard ottenuti su numerose finestre temporali di simulazione.
+La presente relazione analizza un confronto diretto tra due modalità
+di compravendita di energia, la prima basata su scelte casuali
+indipendentemente dal valore o dal tempo, la seconda basata su uno
+storico di prezzi e su scelte che l'algoritmo può compiere in base ai dati disponibili.
+Per far funzionare il tutto è stato creato un simulatore in C++ in grado
+di eseguire esperimenti mettendo a disposizione delle rispettive strategie
+tutte le funzionalità necessarie per effettuare le operazioni.
+Per gli esperimenti è stata posta come baseline la strategia casuale.
+Essa ci permette di osservare le principali differenze di guadagno
+nel momento in cui i risultati ottenuti tramite la strategia basata
+sui prezzi storici vengono messi a confronto.
+A differenza della strategia casuale, la strategia basata sui prezzi
+storici utilizza la media geometrica dei prezzi storici per selezionare
+le reti elettriche sulle quali effettuare le operazioni.
 
 \clearpage
 
@@ -189,46 +199,46 @@ standard ottenuti su numerose finestre temporali di simulazione.
 
 \section{Contesto}
 
-Il lavoro si colloca nell'ambito della simulazione di strategie per la
-compravendita di energia elettrica. Il sistema sviluppato gestisce i dati
-storici dei prezzi, configura gli esperimenti, esegue le simulazioni e
-calcola statistiche aggregate sui rendimenti ottenuti. Ogni simulazione
-modella inoltre lo stato di un portafoglio virtuale e di una batteria per
-rappresentare, rispettivamente, le risorse economiche e l'energia acquistata.
+Il progetto si inserisce all'interno della materia di gestione
+della compravendita di energia.
+Per questo motivo è stato creato un simulatore in C++ in grado
+di effettuare un confronto tra diverse strategie.
+L'obiettivo del lavoro è studiare l'efficienza di una determinata
+strategia "intelligente", ponendo come base una strategia che utilizza
+scelte casuali. Le simulazioni sono state effettuate sui dati forniti,
+che permettono di raccogliere e studiare i risultati delle due strategie,
+per metterli in seguito a confronto.
+
+
 
 \section{Motivazioni}
 
-La motivazione principale del progetto è verificare se una strategia basata su
-informazioni storiche possa migliorare il rendimento rispetto a una strategia
-casuale. Il confronto non riguarda soltanto il rendimento medio, ma anche la
-variabilità dei risultati, così da valutare il compromesso tra guadagno e
-incertezza.
+La motivazione principale che ha spinto la creazione di questo progetto 
+è stata cercare di capire se un determinato algoritmo di decisione, diverso
+dalla scelta casuale, fosse effettivamente più efficiente.
+Inoltre, volevo realizzare in modo efficiente un simulatore a basso livello,
+in grado di studiare il comportamento di diverse strategie utilizzando dati storici.
 
+\clearpage
 \section{Contributi}
 
 I principali contributi del lavoro sono:
+
 \begin{itemize}
-    \item la progettazione e l'implementazione di un simulatore per la
-        compravendita di energia su più reti elettriche;
+
+    \item la progettazione e l'implementazione di un simulatore a basso livello
+          per permettere lo svolgimento di test basati su algoritmi di compravendita;
+
     \item la modellazione dei principali elementi del dominio, tra cui
-        batteria, portafoglio, transazioni e rete elettrica;
+          batteria, portafoglio, transazioni e rete elettrica;
+
     \item l'implementazione e il confronto di strategie casuali e basate sulla
-        media geometrica dei prezzi storici;
+          media geometrica dei prezzi storici;
+
     \item la definizione di una campagna sperimentale per analizzare il
-        rendimento medio e la sua variabilità al variare dei parametri.
+          rendimento medio e la sua variabilità al variare dei parametri.
+
 \end{itemize}
-
-\section{Stato dell'arte}
-
-Lo stato dell'arte e i riferimenti bibliografici relativi alle strategie di
-compravendita e all'uso di medie mobili saranno approfonditi nella versione
-finale della tesi. In questa prima stesura, il lavoro viene presentato come
-uno studio sperimentale interno al simulatore: i risultati permettono di
-valutare il comportamento delle strategie sui dati disponibili, ma non
-costituiscono una previsione dell'andamento reale del mercato elettrico.
-
-% Esempio di citazione:
-% \cite{paper_example}
 
 \section{Struttura della tesi}
 
@@ -241,7 +251,7 @@ Il Capitolo~\ref{chap:results} presenta i risultati sperimentali.
 Infine, il Capitolo~\ref{chap:conclusions} presenta le conclusioni
 e i possibili sviluppi futuri.
 
-
+% fino a qui tutto bene 
 % =========================================================
 % 2. BACKGROUND
 % =========================================================
@@ -249,60 +259,87 @@ e i possibili sviluppi futuri.
 \chapter{Contesto teorico}
 \label{chap:background}
 
-% Inserire qui tutto il background necessario per comprendere
-% il progetto. 
+Per rendere il progetto più semplice da comprendere e da modificare in seguito, 
+è stato diviso in più moduli. Questa suddivisione permette di mantenere separate 
+le diverse responsabilità degli elementi che compongono il progetto e di facilitare 
+l'individuazione dei problemi nel momento in cui si presentano.
 
-Il progetto è stato organizzato secondo una suddivisione in moduli, con
-l'obiettivo di separare il modello del dominio, la logica delle operazioni,
-la persistenza dei dati e l'esecuzione delle simulazioni. Ogni componente ha
-una responsabilità specifica; nelle sezioni successive vengono descritti gli
-elementi principali del sistema.
+In particolare, i suoi moduli sono i seguenti.
 
 \section{Batteria}
 
-La batteria rappresenta l'energia acquistata e conservata durante una
-simulazione. La classe mantiene la capacità massima e il livello corrente di
-energia e mette a disposizione le operazioni di carica e scarica. Un acquisto
-è consentito soltanto quando lo spazio disponibile è sufficiente, mentre una
-vendita richiede che la batteria contenga una quantità adeguata di energia.
+La batteria è il modulo che si occupa di mantenere i dati riguardanti la carica 
+e la disponibilità di spazio rimanente al suo interno.
+
+In particolare, attraverso la batteria possiamo immagazzinare energia e rimuoverla 
+nel momento della vendita. Sono inoltre presenti dei controlli che impediscono 
+il caricamento oltre la capacità massima e lo scaricamento oltre la quantità 
+di energia disponibile.
 
 \section{Rete elettrica}
 
-La rete elettrica memorizza la sequenza temporale dei prezzi associati a una
-specifica sorgente. I prezzi possono essere recuperati tramite il relativo
-timestamp. Per rendere più efficiente il calcolo della media geometrica,
-insieme ai prezzi vengono mantenute le somme prefisse dei loro logaritmi e il
-conteggio dei prezzi validi.
+La rete elettrica è un sottomodulo del modulo Sorgente. Attraverso di essa possiamo 
+gestire lo storico dei prezzi e definire, per ogni rete, i relativi timestamp 
+e prezzi.
+
+Il modulo definisce il modello utilizzato per rappresentare ogni rete elettrica, 
+ognuna delle quali possiede la propria sequenza di prezzi associata ai diversi 
+timestamp.
 
 \section{Portafoglio}
 
-Il portafoglio gestisce le risorse economiche della simulazione. Esso
-mantiene separati il saldo disponibile, utilizzabile per nuovi acquisti, e il
-saldo accantonato. Il saldo totale, utilizzato per calcolare il rendimento
-finale, è dato dalla somma delle due componenti. Quando viene registrata una
-vendita, una percentuale del ricavo viene accantonata secondo il parametro
-\texttt{SET\_ASIDE\_PERCENTAGE}.
+Il portafoglio è un modulo essenziale che garantisce la gestione del denaro 
+durante la simulazione.
+
+Il suo saldo viene suddiviso in due parti, definite attraverso i parametri 
+\texttt{SET\_ASIDE} e \texttt{AVAILABLE}. Possiamo quindi definire inizialmente 
+una parte del saldo che non verrà utilizzata per nuovi acquisti e un'altra parte 
+che potrà invece essere utilizzata per effettuare nuove operazioni.
+
+Anche se solo una parte del saldo è disponibile per essere spesa, la somma 
+delle due componenti costituisce il totale di cui dispone il portafoglio.
+
+\section{Transazione}
+
+Al fine di definire in maniera più precisa l'acquisto e la vendita di energia, 
+è stato definito un modulo che riguarda nello specifico ogni transazione effettuata.
+
+Grazie ad esso è possibile memorizzare le informazioni relative a una transazione, 
+tra cui la quantità di energia acquistata o venduta e il relativo costo.
+
+\section{Servizio di trading}
+
+Questo particolare modulo permette di definire se è possibile effettuare 
+un acquisto o una vendita.
+
+In particolare, espone delle funzioni che permettono di verificare se è possibile 
+effettuare una determinata operazione, considerando i vincoli relativi al 
+portafoglio e alla batteria.
+
+Inoltre, il modulo si occupa di eseguire le operazioni di acquisto e vendita 
+una volta verificato che le condizioni necessarie siano rispettate.
 
 \section{Strategie}
 
-Il confronto considerato in questa tesi riguarda due strategie: una baseline
-casuale e una strategia informata, denominata SmartGeometric. Quest'ultima
-utilizza il rapporto tra il prezzo corrente e la media geometrica di una
-finestra di prezzi storici e applica una selezione ordinata tra le diverse reti
-elettriche.
+Per semplicità, sono state raccolte nello stesso modulo le due strategie 
+utilizzate nel progetto. È inoltre possibile aggiungere faceilmente altre 
+strategie nel momento in cui si voglia effettuare un nuovo tipo di scelta.
+
+Più nello specifico, una strategia corrisponde ad una funzione in grado di 
+ricevere come parametri la batteria, l'array di reti elettriche, il portafoglio 
+e il trading service.
 
 \begin{itemize}
-        \item \texttt{randomChoise}: a ogni timestamp seleziona casualmente,
-            con probabilità uniforme, una delle azioni disponibili: non operare,
-            acquistare o vendere. Le operazioni vengono comunque eseguite solo
-            quando il portafoglio e la batteria rispettano i vincoli necessari;
-        \item \texttt{smartgeometricChoise}: ordina le reti in base al rapporto
-            prezzo/media geometrica, privilegiando gli acquisti sulle reti con
-            rapporto più basso e le vendite su quelle con rapporto più alto,
-            nel rispetto dei limiti massimi di acquisto e vendita.
+    \item \texttt{randomChoise}: a ogni timestamp seleziona casualmente, 
+    con probabilità uniforme, una delle azioni disponibili: non operare, 
+    acquistare o vendere. Le operazioni vengono comunque eseguite solo 
+    quando il portafoglio e la batteria rispettano i vincoli necessari;
 
+    \item \texttt{smartgeometricChoise}: ordina le reti in base al rapporto 
+    prezzo/media geometrica, privilegiando gli acquisti sulle reti con 
+    rapporto più basso e le vendite su quelle con rapporto più alto, 
+    nel rispetto dei limiti massimi di acquisto e vendita.
 \end{itemize}
-
 % =========================================================
 % 3. METHODS
 % =========================================================
@@ -319,6 +356,7 @@ Il problema affrontato consiste nel valutare se una strategia basata sui
 prezzi storici possa ottenere risultati migliori rispetto a una strategia
 casuale nella compravendita di energia elettrica.
 
+% va bene
 
 \section{Approccio proposto}
 
@@ -331,23 +369,36 @@ vendita. La strategia Smart ordina inoltre le reti secondo questo rapporto e
 seleziona le opportunità migliori, rispettando i vincoli del portafoglio e
 della batteria.
 
+% va bene 
+
+
 \section{Progettazione del sistema}
 
-Il sistema è organizzato in quattro livelli principali. Il modulo di
-persistenza importa i prezzi da un file CSV e li salva in un database SQLite.
-Il modello del dominio rappresenta reti elettriche, batteria, portafoglio e
-transazioni. Il servizio di trading applica le regole che rendono valida una
-operazione. Infine, il simulatore coordina le finestre temporali, invoca la
-strategia scelta e raccoglie i rendimenti.
+Il sistema è stato progettato per garantire il corretto funzionamento durante
+l'esecuzione degli esperimenti. Ogni esperimento viene gestito principalmente
+dal simulatore, che rappresenta il cuore del progetto.
 
-Questa separazione consente di modificare la strategia senza alterare il
-modello dello stato finanziario ed energetico. Inoltre, ogni finestra utilizza
-un portafoglio, una batteria e un servizio di trading indipendenti, evitando
-che lo stato di una simulazione influenzi le altre.
+Nel momento in cui viene avviato il simulatore, vengono eseguite una serie di
+operazioni necessarie per preparare l'esperimento. Come prima cosa viene
+istanziato il database, che permette di gestire in modo più ordinato i dati
+provenienti dai file CSV. Successivamente, i dati vengono caricati all'interno
+del programma per poter essere utilizzati durante gli esperimenti.
+
+Ogni esperimento utilizza i dati caricati per eseguire le operazioni previste
+dalla strategia scelta e calcolare i relativi risultati. Per migliorare i tempi
+di esecuzione, gli esperimenti vengono eseguiti in parallelo utilizzando i
+core disponibili.
+
+Ogni esperimento utilizza indipendentemente dagli altri una propria batteria
+e un proprio portafoglio, in modo da evitare che lo stato di un esperimento
+possa influenzare i risultati degli altri.
+
+% va bene 
 
 \section{Algoritmi}
 
-Il rendimento di una finestra è definito come
+Per poter calcolare il rendimento di una strategia viene effettuato il calcolo
+dello Yield, definito come:
 
 \begin{equation}
     Y = \frac{B_f - B_0}{B_0},
@@ -356,149 +407,175 @@ Il rendimento di una finestra è definito come
 dove $B_0$ è il saldo iniziale e $B_f$ è il saldo totale al termine della
 finestra, ottenuto sommando il saldo disponibile e quello accantonato.
 
-La media geometrica utilizzata dalla strategia è calcolata come
+\subsection{Algoritmo random}
+
+L'algoritmo random effettua una scelta casuale a ogni timestamp tra le
+possibili operazioni. In particolare, le possibilità considerate sono:
+non effettuare alcuna operazione, acquistare energia oppure vendere energia.
+
+La scelta viene effettuata con probabilità uniforme tra le tre possibilità.
+L'operazione scelta non viene però eseguita direttamente: prima viene
+verificato che siano rispettati i vincoli necessari per poter effettuare
+l'operazione.
+
+Ad esempio, non è possibile acquistare energia se il portafoglio non dispone
+del denaro necessario oppure vendere energia se nella batteria non è presente
+una quantità sufficiente di energia.
+
+In questo modo la strategia random rappresenta una baseline con cui confrontare
+i risultati ottenuti dalle strategie che utilizzano informazioni sui prezzi
+storici.
+
+\subsection{Algoritmo SmartGeometricChoice}
+
+La strategia SmartGeometricChoice utilizza lo storico dei prezzi per
+determinare quali operazioni effettuare. In particolare, per ogni rete
+elettrica viene calcolata la media geometrica dei prezzi presenti nella finestra
+storica considerata.
+
+La media geometrica utilizzata dalla strategia è calcolata come:
 
 \begin{equation}
     G = \exp\left(\frac{1}{n}\sum_{k=1}^{n}\log p_k\right),
 \end{equation}
 
 dove $p_k$ sono i prezzi validi nella finestra storica e $n$ è il loro numero.
-Indicando con $p$ il prezzo corrente, la decisione è basata sul rapporto
-$r=p/G$: si acquista quando $r$ è inferiore alla soglia di acquisto e si vende
-quando $r$ è superiore alla soglia di vendita.
 
-La strategia casuale seleziona uniformemente tra nessuna operazione,
-acquisto e vendita. La strategia SmartGeometric ordina invece i rapporti
-calcolati per le diverse reti e privilegia gli acquisti con rapporto minore e
-le vendite con rapporto maggiore.
+Indicando con $p$ il prezzo corrente, la decisione viene effettuata attraverso
+il rapporto tra il prezzo corrente e la media geometrica:
 
-% Esempio:
-%
-% \begin{equation}
-%     ...
-% \end{equation}
+\begin{equation}
+    r = \frac{p}{G}.
+\end{equation}
 
+Un valore del rapporto inferiore a $1$ indica che il prezzo corrente è
+inferiore alla media geometrica, mentre un valore superiore a $1$ indica che
+il prezzo corrente è superiore alla media.
+
+La strategia utilizza quindi due soglie per determinare le operazioni.
+Si acquista quando il rapporto $r$ è inferiore alla soglia di acquisto,
+mentre si vende quando il rapporto $r$ è superiore alla soglia di vendita.
+
+Le reti elettriche vengono ordinate in base al rapporto calcolato. Gli acquisti
+vengono effettuati partendo dalle reti con il rapporto più basso, mentre le
+vendite vengono effettuate partendo da quelle con il rapporto più alto.
+Le operazioni sono comunque soggette ai limiti massimi di acquisto e vendita
+e ai vincoli del portafoglio e della batteria.
+
+% da ricontrollare bene ma va bene 
 
 % =========================================================
 % 4. IMPLEMENTATION
 % =========================================================
 
 \chapter{Implementazione}
-\label{chap:implementation}
 
-% Descrizione dell'implementazione concreta.
-% Qui possono essere utilizzati pseudocodice e diagrammi.
+\label{chap:implementation}
+\label{chap:results}
 
 \section{Architettura del sistema}
 
-Il punto di ingresso è il programma principale, che interpreta i parametri
-passati dalla riga di comando, inizializza il database e seleziona la
-strategia. Il componente \texttt{Simulator} carica le reti elettriche e
-coordina l'esecuzione. Per ogni finestra crea gli oggetti \texttt{Wallet},
-\texttt{Battery} e \texttt{TradingService}; quest'ultimo esegue le
-operazioni richieste dalla strategia.
+Il \texttt{Simulator} rappresenta il componente principale del sistema e si
+occupa di gestire l'esecuzione degli esperimenti. Il simulatore può ricevere
+in ingresso i parametri necessari per configurare l'esperimento, mentre, in
+assenza di valori specifici, vengono utilizzati i valori predefiniti.
 
-Al termine della finestra, le posizioni residue vengono liquidate all'ultimo
-prezzo valido disponibile. Il rendimento viene quindi aggiunto al monitor
-statistico, che calcola media e deviazione standard e registra i risultati
-degli esperimenti.
+Durante l'avvio vengono inizializzati i componenti necessari alla simulazione.
+In particolare, vengono create le istanze delle \texttt{ElectricityGrid},
+della \texttt{Battery}, del \texttt{Wallet} e del \texttt{TradingService}.
+Successivamente, i componenti vengono riempiti con i dati precedentemente
+caricati dal database.
 
-% Esempio di figura:
-%
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{images/architecture.png}
-%     \caption{Architettura del sistema.}
-%     \label{fig:architecture}
-% \end{figure}
+Per gli esperimenti sono state utilizzate 999 reti elettriche, ognuna
+caratterizzata dai propri prezzi, e un totale di 5966 timestamp.
+
+La simulazione viene eseguita utilizzando finestre temporali di 300 timestamp.
+Ogni finestra viene considerata come un esperimento indipendente e dispone
+delle proprie strutture di stato, in particolare della batteria e del
+portafoglio.
+
+Durante l'esecuzione, per ogni timestamp vengono analizzati i prezzi delle
+reti elettriche. La gestione delle operazioni da effettuare viene affidata
+alla strategia selezionata, che determina se acquistare, vendere oppure non
+effettuare alcuna operazione.
 
 \section{Componenti principali}
 
-I componenti principali sono:
+I principali componenti utilizzati per la realizzazione del sistema sono:
+
 \begin{itemize}
-    \item \texttt{Database}, responsabile dell'accesso al database SQLite;
-    \item \texttt{ElectricityGrid}, che conserva i prezzi di una rete e le
-        strutture necessarie al calcolo della media geometrica;
-    \item \texttt{Wallet} e \texttt{Battery}, che modellano rispettivamente
-        il capitale e l'energia disponibili;
-    \item \texttt{TradingService}, che verifica ed esegue acquisti e vendite;
-    \item \texttt{Simulator}, che coordina le finestre temporali e il
-        parallelismo;
-    \item il modulo \texttt{monitor}, che raccoglie i rendimenti e calcola le
-        statistiche aggregate.
+
+    \item \texttt{Database}, responsabile della gestione dei dati presenti
+    nel database SQLite;
+
+    \item \texttt{ElectricityGrid}, utilizzato per rappresentare una rete
+    elettrica e per mantenere lo storico dei relativi prezzi;
+
+    \item \texttt{Wallet}, utilizzato per gestire il denaro disponibile
+    durante la simulazione;
+
+    \item \texttt{Battery}, utilizzato per gestire l'energia acquistata e
+    quella disponibile per le successive operazioni di vendita;
+
+    \item \texttt{TradingService}, responsabile della verifica dei vincoli
+    necessari e dell'esecuzione delle operazioni di acquisto e vendita;
+
+    \item \texttt{Simulator}, responsabile dell'esecuzione degli esperimenti,
+    della gestione delle finestre temporali e del parallelismo;
+
+    \item \texttt{monitor}, utilizzato per raccogliere i risultati delle
+    simulazioni e calcolare le relative statistiche.
+    
 \end{itemize}
 
 \section{Dettagli implementativi}
 
-I dati dei prezzi vengono caricati dal database e ricostruiti in memoria come
-un vettore di oggetti \texttt{ElectricityGrid}. Le somme prefisse dei
-logaritmi permettono di calcolare la somma su una finestra in tempo costante,
-riducendo il costo del calcolo ripetuto della media geometrica.
+I dati relativi ai prezzi vengono caricati dal database e ricostruiti in
+memoria attraverso un vettore di oggetti \texttt{ElectricityGrid}. Ogni rete
+contiene lo storico dei propri prezzi associati ai diversi timestamp.
 
-Il ciclo esterno sulle finestre temporali è parallelizzato con OpenMP. Le
-strutture mutabili della singola simulazione sono locali al thread, mentre
-l'inserimento dei rendimenti nel vettore condiviso del monitor è protetto da
-una sezione critica.
+Per velocizzare il calcolo della media geometrica vengono utilizzate delle
+somme prefisse dei logaritmi dei prezzi. In questo modo è possibile ottenere
+la somma dei logaritmi relativa a una determinata finestra temporale senza
+dover ricalcolare ogni volta tutti i valori presenti nella finestra.
+
+L'esecuzione delle diverse finestre temporali viene parallelizzata tramite
+OpenMP. Ogni simulazione mantiene localmente le proprie strutture modificabili,
+come il \texttt{Wallet} e la \texttt{Battery}, evitando che le operazioni di
+un esperimento possano modificare lo stato di un altro.
+
+I risultati delle simulazioni vengono invece raccolti dal \texttt{monitor}.
+Poiché il vettore contenente i risultati è condiviso tra i diversi thread,
+l'inserimento dei nuovi risultati viene protetto attraverso una sezione
+critica.
 
 \section{Implementazione degli algoritmi}
 
-Durante ogni timestamp la strategia legge il prezzo corrente di ciascuna
-rete. I prezzi non validi vengono ignorati. Per la strategia Smart, i rapporti
-prezzo/media vengono inseriti in una struttura ordinata; il primo passaggio
-considera le reti dal rapporto più basso e il secondo le percorre in ordine
-inverso. Prima di ogni operazione, il \texttt{TradingService} verifica che il
-portafoglio disponga del budget richiesto, che la batteria abbia spazio per un
-acquisto e che contenga energia sufficiente per una vendita.
+Ad ogni timestamp la strategia selezionata analizza il prezzo corrente delle
+diverse reti elettriche. I prezzi non validi vengono ignorati.
 
-Al termine della finestra, \texttt{sellAll} chiude le posizioni ancora aperte.
-In questo modo il rendimento comprende sia il saldo disponibile sia il valore
-realizzato dalla liquidazione dell'energia residua.
+Nel caso della strategia \texttt{smartgeometricChoise}, per ogni rete viene
+calcolato il rapporto tra il prezzo corrente e la relativa media geometrica.
+I rapporti ottenuti vengono inseriti in una struttura ordinata, permettendo
+di analizzare le reti a partire dai valori più bassi.
 
-% Esempio di codice:
-%
-% \begin{lstlisting}[language=C++, caption={Esempio di codice}]
-% int main() {
-%     return 0;
-% }
-% \end{lstlisting}
+Durante la fase di acquisto vengono quindi considerate le reti con il
+rapporto più basso, mentre durante la fase di vendita vengono considerate
+quelle con il rapporto più alto. Le operazioni vengono interrotte quando
+viene raggiunta la relativa soglia oppure il numero massimo di operazioni
+consentite.
 
+Prima dell'esecuzione di ogni operazione, il \texttt{TradingService} verifica
+che siano rispettati i vincoli necessari. Per un acquisto viene verificato
+che il portafoglio disponga del budget necessario e che la batteria abbia
+spazio sufficiente. Per una vendita viene invece verificato che la batteria
+contenga una quantità sufficiente di energia.
 
-% =========================================================
-% 5. EXPERIMENTAL RESULTS
-% =========================================================
-
-\chapter{Risultati sperimentali}
-\label{chap:results}
-
-% Questa dovrebbe essere una delle sezioni più importanti
-% della tesi.
-
-\section{Obiettivi}
-
-L'attività sperimentale ha l'obiettivo di valutare l'efficacia delle strategie
-di compravendita implementate nel simulatore. In particolare, il confronto
-principale riguarda la strategia \texttt{smartGeometricChoise} e la strategia
-\texttt{randomChoice}, utilizzata come baseline.
-
-Le due strategie adottano approcci differenti: la strategia
-\texttt{smartgeometricChoise} utilizza informazioni ricavate dai prezzi
-storici, mentre la strategia \texttt{randomChoise} si basa su scelte casuali.
-
-Gli esperimenti sono stati progettati per:
-
-\begin{itemize}
-    \item misurare il rendimento medio prodotto dalle due strategie;
-    \item analizzare la variabilità dei risultati tramite la deviazione standard;
-    \item studiare l'influenza dei principali parametri della strategia Smart;
-    \item verificare in quali configurazioni la strategia Smart migliora il
-          comportamento della baseline casuale.
-\end{itemize}
-
-Il rendimento medio non viene quindi considerato come unico criterio di
-valutazione: una strategia più redditizia, ma anche più variabile, deve essere
-interpretata tenendo conto del corrispondente aumento dell'incertezza.
-
-
+Al termine di ogni finestra temporale viene eseguito \texttt{sellAll}, che
+permette di liquidare l'eventuale energia ancora presente nella batteria.
+In questo modo, al termine della simulazione, il valore dell'energia residua
+viene trasformato nuovamente in denaro e può essere considerato nel calcolo
+del rendimento.
 % ---------------------------------------------------------
 % 5.2 SETTING
 % ---------------------------------------------------------
@@ -516,8 +593,9 @@ oggetto dell'analisi.
 
 Per gli esperimenti è stato utilizzato un computer locale con:
 \begin{itemize}
-    \item 16 GB di RAM;
-    \item processore Intel Core i7-9700;
+    \item \texttt{disco}: nvme 970 evo plus;
+    \item \texttt{ram}: 16 GB;
+    \item \texttt{processore}: Intel Core i7-9700;
 \end{itemize}
 
 Sono riportate soltanto le caratteristiche considerate rilevanti per
@@ -538,6 +616,8 @@ budget per operazione, il saldo iniziale e la soglia di vendita. Sono stati
 variati la finestra geometrica, la percentuale accantonata e la soglia di
 acquisto, secondo i valori riportati in Tabella~\ref{tab:experimental-parameters}.
 
+
+
 \begin{table}[H]
     \centering
     \caption{Parametri utilizzati nella campagna sperimentale.}
@@ -549,8 +629,8 @@ acquisto, secondo i valori riportati in Tabella~\ref{tab:experimental-parameters
         Finestra simulazione & 300 \\
         Budget per operazione & 10 \\
         Saldo iniziale & 1000 \\
-        Finestra geometrica & 10, 20, 50, 100 \\
         Set Aside (\%) & 10, 20, 30, 50 \\
+        Finestra geometrica & 10, 20, 50, 100 \\
         Buy Threshold & 0.9, 0.8, 0.7 \\
         Sell Threshold & 1.0 \\
         \bottomrule
@@ -565,6 +645,7 @@ Random avente gli stessi valori di tutti i parametri. Random viene invece
 trattata come baseline, mentre i parametri specifici della strategia Smart
 sono analizzati separatamente.
 
+% va bene 
 
 % ---------------------------------------------------------
 % 5.3  CASI DI STUDIO  
@@ -579,20 +660,30 @@ guadagno finale medio.
 
 \subsection{Baseline casuale}
 
-La strategia \texttt{randomChoise} costituisce il riferimento sperimentale.
+La strategia \texttt{randomChoise} costituisce il riferimento sperimentale
+utilizzato per il confronto con la strategia basata sui prezzi storici.
+
 Nel campione analizzato produce un rendimento medio compreso tra il 7,40\%
 e il 7,58\%, una deviazione standard prossima al 12\% e un guadagno finale
-medio compreso tra circa 74 e 76 unità monetarie. La variazione residua tra
-le configurazioni è compatibile con il carattere casuale della strategia e
-con l'effetto della percentuale accantonata.
+medio compreso tra circa 74 e 76 unità monetarie.
 
-\subsection{Strategia Smart} %da rivedere
+La variazione tra le diverse configurazioni è limitata e riguarda
+principalmente la percentuale di capitale accantonata.
 
-Per \texttt{smartgeometricChoise} sono state analizzate quattro finestre
-geometriche e tre soglie di acquisto. La percentuale accantonata è stata
-considerata come parametro secondario, poiché in diverse configurazioni il
-suo effetto sul rendimento risulta nullo o molto contenuto.
+\subsection{Strategia Smart}
 
+Per la strategia \texttt{smartgeometricChoise} sono state analizzate quattro
+diverse finestre geometriche e tre diverse soglie di acquisto. Per ogni
+combinazione sono state inoltre considerate le diverse percentuali di
+capitale accantonato utilizzate negli esperimenti.
+
+A differenza della strategia casuale, la strategia Smart utilizza quindi
+parametri specifici legati al calcolo della media geometrica e alla scelta
+delle operazioni da effettuare. I risultati ottenuti vengono confrontati con
+la baseline casuale, osservando come il rendimento e la sua variabilità
+cambiano al variare dei diversi parametri.
+
+% va bene 
 
 % ---------------------------------------------------------
 % 5.4 CORRETTEZZA
@@ -600,13 +691,21 @@ suo effetto sul rendimento risulta nullo o molto contenuto.
 
 \section{Correttezza}
 
-La correttezza è stata valutata verificando separatamente le invarianti del
-modello e il comportamento complessivo del simulatore. In particolare, un
-acquisto non deve ridurre il saldo disponibile sotto zero né superare la
-capacità della batteria; una vendita non deve utilizzare energia non presente
-nella batteria o non associata alla rete interessata. Al termine di ogni
-finestra, inoltre, le posizioni residue devono essere liquidate prima del
-calcolo del rendimento.
+La correttezza del sistema è stata valutata definendo all'interno del codice
+una serie di controlli che impediscono di discostarsi dai vincoli previsti
+dal modello. In particolare, sono state effettuate delle scelte di
+progettazione come il controllo degli acquisti, che non possono essere
+effettuati se non si possiede il denaro necessario, oppure il controllo delle
+vendite, che possono essere effettuate solo se si possiede una quantità
+sufficiente di energia elettrica.
+
+Altri controlli riguardano la batteria, che non può contenere una quantità di
+energia superiore alla capacità per cui è stata progettata.
+
+Tutti questi controlli permettono di effettuare gli esperimenti mantenendo
+il rispetto dei vincoli definiti dal sistema. In caso di errore o di
+violazione di uno dei vincoli, vengono sollevate delle eccezioni che
+interrompono l'esecuzione del programma.
 
 \subsection{Test di correttezza}
 
@@ -614,18 +713,22 @@ I test vengono eseguiti tramite gli script del progetto, che compilano il
 simulatore e lanciano combinazioni delle due strategie e dei relativi
 parametri. La verifica comprende la strategia casuale e la strategia
 SmartGeometric, oltre alla variazione della finestra geometrica, della soglia
-di acquisto e della percentuale accantonata. Per ogni esecuzione si controlla
-che il programma termini correttamente e che produca rendimento medio,
-deviazione standard e guadagno finale.
+di acquisto e della percentuale accantonata.
+
+Per ogni esecuzione viene controllato che il programma termini correttamente
+e che produca i risultati relativi al rendimento medio, alla deviazione
+standard e al guadagno finale.
 
 \subsection{Risultati}
 
-Non sono state osservate condizioni di saldo o capacità non valide nelle
-esecuzioni considerate. I risultati vengono registrati nel file CSV degli
-esperimenti insieme ai parametri utilizzati, rendendo possibile la
-riproduzione e il controllo delle singole configurazioni.
+Durante le esecuzioni considerate non sono state osservate condizioni di
+saldo o capacità non valide. I risultati vengono registrati nel file CSV
+degli esperimenti insieme ai parametri utilizzati, rendendo possibile
+il controllo delle singole configurazioni e la riproduzione degli
+esperimenti.
 
-
+% va bene
+ 
 % ---------------------------------------------------------
 % 5.5  VALUTAZIONE COMPUTAZIONALE
 % ---------------------------------------------------------
@@ -660,144 +763,406 @@ aumento dell'utilizzo durante il ciclo sulle finestre è atteso, mentre il
 guadagno effettivo deve essere valutato confrontando il tempo di esecuzione
 con la versione a thread singolo.
 
+% va bene 
 
 % ---------------------------------------------------------
 % 5.6  VALUTAZIONE TECNICA
 % ---------------------------------------------------------
-
 \section{Valutazione tecnica}
 
-La valutazione tecnica considera il rendimento e la sua variabilità per
-confrontare la strategia Smart con il comportamento della baseline casuale.
+La valutazione tecnica è stata effettuata analizzando i risultati prodotti
+dalle diverse configurazioni sperimentali. In particolare, sono stati
+considerati il rendimento medio (\textit{Average Yield}), la deviazione
+standard e il guadagno finale medio.
+
+L'obiettivo dell'analisi è osservare come il comportamento della strategia
+\texttt{smartgeometricChoise} cambia al variare dei principali parametri
+utilizzati e confrontare i risultati ottenuti con quelli della baseline
+casuale.
 
 \subsection{Risultati sperimentali}
 
-I risultati mostrano una forte dipendenza della strategia Smart dalla soglia
-di acquisto. Considerando, a titolo rappresentativo, una finestra geometrica
-pari a 20 e una percentuale accantonata pari al 10\%, si osserva il seguente
-andamento:
+I risultati mostrano una variazione del rendimento della strategia
+\texttt{smartgeometricChoise} al variare della soglia di acquisto e della
+finestra geometrica.
 
-\begin{table}[H]
-    \centering
-    \caption{Risultati rappresentativi per finestra geometrica pari a 20.}
-    \label{tab:smart-representative-results}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{lrrr}
-        \toprule
-        Buy Threshold & Average Yield (\%) & Deviazione standard (\%) & Guadagno medio \\
-        \midrule
-        0.9 & 5.64 & 9.83 & 56.36 \\
-        0.8 & 8.23 & 11.76 & 82.33 \\
-        0.7 & 10.77 & 13.21 & 107.69 \\
-        \bottomrule
-    \end{tabular}%
-    }
+Per analizzare in modo più diretto l'effetto della soglia di acquisto, si può
+considerare il caso con finestra geometrica pari a 10 e capitale accantonato
+pari al 10\%. I risultati sono riportati nella
+Tabella~\ref{tab:smart_window10}.
+
+\begin{table}[ht]
+\centering
+\caption{Risultati della strategia Smart con finestra geometrica pari a
+10 e capitale accantonato pari al 10\%.}
+\label{tab:smart_window10}
+\begin{tabular}{c|c|c|c}
+\hline
+\textbf{Buy Threshold} &
+\textbf{Average Yield (\%)} &
+\textbf{Deviazione standard (\%)} &
+\textbf{Guadagno medio} \\
+\hline
+0.9 & 6.90619 & 10.0821 & 69.0619 \\
+0.8 & 9.68440 & 12.4800 & 96.8440 \\
+0.7 & 12.2462 & 14.6348 & 122.4620 \\
+\hline
+\end{tabular}
 \end{table}
 
-Rispetto alla baseline, il rendimento della strategia Smart passa da valori
-inferiori a Random con soglia 0.9 a valori superiori con soglia 0.8 e 0.7.
-La configurazione più redditizia osservata nel campione è quella con finestra
-geometrica pari a 10 e Buy Threshold pari a 0.7: raggiunge un rendimento
-medio del 12,25\%, contro circa il 7,4\% della baseline.
+In questa configurazione, riducendo la soglia di acquisto da 0.9 a 0.8 il
+rendimento medio passa dal 6.90619\% al 9.68440\%, mentre con una soglia pari
+a 0.7 raggiunge il 12.2462\%.
 
-\subsection{Confronto}
+La stessa variazione è osservabile nella deviazione standard. Il valore passa
+dal 10.0821\% con soglia 0.9 al 12.4800\% con soglia 0.8, fino al 14.6348\%
+con soglia 0.7. Nel campione considerato, quindi, le configurazioni con
+rendimento medio maggiore presentano anche una maggiore variabilità.
 
-Il confronto viene effettuato mantenendo costanti i parametri comuni e
-considerando Random come valore di riferimento. Poiché Random non dipende
-dalla finestra geometrica e dalle soglie usate da Smart, il risultato corretto
-non è un confronto uno-a-uno tra configurazioni omonime, ma un confronto tra
-la baseline e l'insieme delle configurazioni Smart.
+L'effetto della finestra geometrica sul rendimento medio è mostrato in
+Figura~\ref{fig:yield_window}.
 
-La Tabella~\ref{tab:comparison-summary} riassume tre configurazioni Smart e
-la fascia di risultati osservata per Random.
+\begin{figure}[ht]
+\centering
+\IfFileExists{relazione/grafici/01_rendimento_finestra_valori.png}{%
+    \includegraphics[width=0.95\textwidth]{relazione/grafici/01_rendimento_finestra_valori.png}%
+}{%
+    \IfFileExists{grafici/01_rendimento_finestra_valori.png}{%
+        \includegraphics[width=0.95\textwidth]{grafici/01_rendimento_finestra_valori.png}%
+    }{%
+        \fbox{\parbox{0.85\textwidth}{\centering Grafico non disponibile}}%
+    }%
+}
+\caption{Average Yield al variare della finestra geometrica e della soglia
+di acquisto, con capitale accantonato pari al 10\%.}
+\label{fig:yield_window}
+\end{figure}
 
-\begin{table}[H]
-    \centering
-    \caption{Confronto sintetico tra Random e alcune configurazioni Smart.}
-    \label{tab:comparison-summary}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{lrrr}
-        \toprule
-        Configurazione & Average Yield (\%) & Deviazione standard (\%) & Guadagno medio \\
-        \midrule
-        Random (intervallo osservato) & 7.40--7.58 & 11.95--11.99 & 74.02--75.75 \\
-        Smart, geom. 20, buy 0.9 & 5.64 & 9.83 & 56.36 \\
-        Smart, geom. 20, buy 0.8 & 8.23 & 11.76 & 82.33 \\
-        Smart, geom. 20, buy 0.7 & 10.77 & 13.21 & 107.69 \\
-        \bottomrule
-    \end{tabular}%
-    }
+Come mostrato in Figura~\ref{fig:yield_window}, per tutte le soglie
+considerate il rendimento tende a diminuire all'aumentare della finestra
+geometrica.
+
+L'effetto è particolarmente evidente per la soglia di acquisto pari a 0.7,
+per la quale il rendimento passa dal 12.2462\% con finestra 10 al 10.7685\%
+con finestra 20, all'8.91111\% con finestra 50 e infine al 7.36828\% con
+finestra 100.
+
+Per la soglia 0.8 il rendimento passa invece dal 9.6844\% con finestra 10 al
+5.17482\% con finestra 100. Con soglia 0.9 si passa dal 6.90619\% al
+4.59632\%.
+
+Il grafico permette quindi di osservare contemporaneamente l'effetto della
+finestra geometrica e quello della soglia di acquisto, mantenendo costante la
+percentuale di capitale accantonato.
+
+Anche la deviazione standard è stata analizzata al variare dei parametri. I
+risultati sono riportati in Figura~\ref{fig:std_window}.
+
+\begin{figure}[ht]
+\centering
+\IfFileExists{relazione/grafici/02_deviazione_standard_finestra_valori(2).png}{%
+    \includegraphics[width=0.95\textwidth]{relazione/grafici/02_deviazione_standard_finestra_valori(2).png}%
+}{%
+    \IfFileExists{grafici/02_deviazione_standard_finestra_valori(2).png}{%
+        \includegraphics[width=0.95\textwidth]{grafici/02_deviazione_standard_finestra_valori(2).png}%
+    }{%
+        \fbox{\parbox{0.85\textwidth}{\centering Grafico non disponibile}}%
+    }%
+}
+\caption{Deviazione standard al variare della finestra geometrica e della
+soglia di acquisto, con capitale accantonato pari al 10\%.}
+\label{fig:std_window}
+\end{figure}
+
+Per la soglia 0.7, la deviazione standard diminuisce da 14.6348\% con
+finestra 10 a 13.214\% con finestra 20, fino a 11.269\% con finestra 100.
+Anche per la soglia 0.8 si osserva una diminuzione, da 12.48\% con finestra
+10 a 10.2738\% con finestra 100.
+
+Per la soglia 0.9 la variazione è invece più contenuta: la deviazione standard
+passa dal 10.0821\% con finestra 10 al 9.82848\% con finestra 20 e al
+9.68225\% con finestra 50, per poi aumentare leggermente fino al 9.91048\%
+con finestra 100.
+
+I risultati mostrano quindi che il cambiamento della finestra geometrica
+influenza sia il rendimento medio sia la variabilità dei risultati.
+
+Un'ulteriore analisi riguarda direttamente la soglia di acquisto. La
+Figura~\ref{fig:yield_threshold} mostra il rendimento medio per le diverse
+finestre geometriche.
+
+\begin{figure}[ht]
+\centering
+\IfFileExists{relazione/grafici/03_rendimento_soglia_valori.png}{%
+    \includegraphics[width=0.95\textwidth]{relazione/grafici/03_rendimento_soglia_valori.png}%
+}{%
+    \IfFileExists{grafici/03_rendimento_soglia_valori.png}{%
+        \includegraphics[width=0.95\textwidth]{grafici/03_rendimento_soglia_valori.png}%
+    }{%
+        \fbox{\parbox{0.85\textwidth}{\centering Grafico non disponibile}}%
+    }%
+}
+\caption{Average Yield al variare della soglia di acquisto per le diverse
+finestre geometriche, con capitale accantonato pari al 10\%.}
+\label{fig:yield_threshold}
+\end{figure}
+
+La Figura~\ref{fig:yield_threshold} mostra che, per tutte le finestre
+considerate, la riduzione della soglia di acquisto da 0.9 a 0.7 è associata
+a un aumento del rendimento medio.
+
+È importante osservare che una soglia più bassa non rappresenta una maggiore
+permissività della strategia. Nel caso considerato, l'acquisto viene
+effettuato quando il rapporto tra il prezzo corrente e la media geometrica è
+inferiore alla soglia. Di conseguenza, una soglia pari a 0.7 richiede un
+rapporto più basso rispetto a una soglia pari a 0.9.
+
+\subsection{Influenza del capitale accantonato}
+
+È stato analizzato anche l'effetto della percentuale di capitale accantonata.
+Nella maggior parte delle configurazioni della strategia Smart, il valore
+del rendimento rimane invariato al variare di questo parametro.
+
+Ad esempio, per una finestra geometrica pari a 10 e una soglia di acquisto
+pari a 0.7, il rendimento medio è pari a 12.2462\% per tutte le percentuali
+di capitale accantonato considerate.
+
+\begin{table}[ht]
+\centering
+\caption{Average Yield al variare del capitale accantonato con finestra
+geometrica pari a 10.}
+\label{tab:setaside_window10}
+\begin{tabular}{c|c|c|c}
+\hline
+\textbf{Set Aside (\%)} &
+\textbf{Buy 0.9} &
+\textbf{Buy 0.8} &
+\textbf{Buy 0.7} \\
+\hline
+10 & 6.90619 & 9.68440 & 12.2462 \\
+20 & 6.90593 & 9.68440 & 12.2462 \\
+30 & 7.14284 & 9.68440 & 12.2462 \\
+50 & 7.51935 & 9.77596 & 12.2462 \\
+\hline
+\end{tabular}
 \end{table}
+
+La Tabella~\ref{tab:setaside_window10} mostra che l'effetto del capitale
+accantonato dipende dalla configurazione utilizzata. Per le soglie 0.8 e
+0.7 le variazioni sono molto contenute, mentre con soglia 0.9 si osserva un
+aumento del rendimento passando dal 6.90619\% al 7.51935\%.
+
+Il comportamento è mostrato anche nella Figura~\ref{fig:setaside_yield}.
+
+\begin{figure}[ht]
+\centering
+\IfFileExists{relazione/grafici/04_rendimento_set_aside_valori.png}{%
+    \includegraphics[width=0.95\textwidth]{relazione/grafici/04_rendimento_set_aside_valori.png}%
+}{%
+    \IfFileExists{grafici/04_rendimento_set_aside_valori.png}{%
+        \includegraphics[width=0.95\textwidth]{grafici/04_rendimento_set_aside_valori.png}%
+    }{%
+        \fbox{\parbox{0.85\textwidth}{\centering Grafico non disponibile}}%
+    }%
+}
+\caption{Average Yield al variare del capitale accantonato per le diverse
+soglie di acquisto, con finestra geometrica pari a 10.}
+\label{fig:setaside_yield}
+\end{figure}
+
+\subsection{Confronto con la baseline casuale}
+
+La strategia \texttt{randomChoise} viene utilizzata come baseline per il
+confronto con la strategia basata sulla media geometrica.
+
+La baseline è stata eseguita con una finestra geometrica indicata nei
+parametri pari a 20 e con soglia di acquisto pari a 0.8, ma tali parametri
+non influenzano la scelta casuale effettuata dalla strategia. L'unico
+parametro analizzato per la baseline è quindi la percentuale di capitale
+accantonato.
+
+I risultati ottenuti sono riportati nella Tabella~\ref{tab:random_results}.
+
+\begin{table}[ht]
+\centering
+\caption{Risultati della baseline casuale al variare del capitale
+accantonato.}
+\label{tab:random_results}
+\begin{tabular}{c|c|c|c}
+\hline
+\textbf{Set Aside (\%)} &
+\textbf{Average Yield (\%)} &
+\textbf{Deviazione standard (\%)} &
+\textbf{Guadagno medio} \\
+\hline
+10 & 0.604743 & 8.57587 & 6.04743 \\
+20 & 1.28263  & 7.29516 & 12.8263 \\
+30 & 1.31554  & 5.97585 & 13.1554 \\
+50 & 1.09330  & 4.38354 & 10.9330 \\
+\hline
+\end{tabular}
+\end{table}
+
+Nel campione analizzato, il rendimento medio della baseline varia quindi da
+0.604743\% a 1.31554\%. La deviazione standard varia invece da 4.38354\% a
+8.57587\%.
+
+Per confrontare in modo sintetico le due strategie è possibile considerare
+gli intervalli dei valori osservati.
+
+\begin{table}[ht]
+\centering
+\caption{Confronto tra gli intervalli osservati per le strategie Random
+e Smart.}
+\label{tab:strategy_comparison}
+\begin{tabular}{c|c|c|c}
+\hline
+\textbf{Strategia} &
+\textbf{Yield min--max (\%)} &
+\textbf{Dev. standard min--max (\%)} &
+\textbf{Guadagno min--max} \\
+\hline
+Random & 0.604743--1.31554 & 4.38354--8.57587 &
+6.04743--13.1554 \\
+
+```
+    Smart & 4.56965--12.2462 & 9.68035--14.6348 &
+    45.6965--122.462 \\
+    \hline
+\end{tabular}
+```
+
+\end{table}
+
+Nel campione analizzato, tutte le configurazioni Smart considerate presentano
+un rendimento medio superiore a quello delle configurazioni Random. Il valore
+minimo osservato per Smart è infatti pari a 4.56965\%, mentre il valore
+massimo osservato per Random è pari a 1.31554\%.
+
+Anche la deviazione standard presenta valori più elevati per la strategia
+Smart. Il valore minimo osservato per Smart è pari a 9.68035\%, mentre il
+valore massimo osservato per Random è pari a 8.57587\%.
+
+Il confronto deve comunque essere interpretato considerando Random come
+baseline e non come una configurazione equivalente alle diverse
+configurazioni Smart. La strategia casuale infatti non utilizza la finestra
+geometrica e la soglia di acquisto per determinare le operazioni.
 
 \subsection{Discussione}
 
-Il confronto evidenzia che la strategia Smart non è uniformemente superiore
-alla strategia Random. Con Buy Threshold pari a 0.9, la baseline casuale
-ottiene un rendimento maggiore; riducendo la soglia a 0.8, Smart supera
-invece il rendimento medio di Random; con soglia 0.7 il vantaggio diventa più
-marcato.
+I risultati mostrano una relazione tra il rendimento medio e la variabilità
+delle configurazioni analizzate. In particolare, le configurazioni con
+rendimento medio maggiore presentano in diversi casi anche una deviazione
+standard maggiore.
 
-Anche la finestra geometrica influenza il risultato. Con Buy Threshold pari
-a 0.7, il rendimento passa dal 12,25\% con finestra 10 al 10,77\% con
-finestra 20, all'8,91\% con finestra 50 e al 7,37\% con finestra 100. Nel
-campione considerato, finestre più brevi sono quindi associate a rendimenti
-maggiori. Questo risultato è compatibile con una maggiore reattività alle
-variazioni recenti dei prezzi, ma tale interpretazione deve essere riferita
-alla configurazione e ai dati analizzati, senza essere generalizzata oltre
-l'esperimento.
+Un esempio è rappresentato dalla finestra geometrica pari a 10 e dal
+capitale accantonato pari al 10\%. Riducendo la soglia di acquisto da 0.9 a
+0.7, il rendimento medio passa dal 6.90619\% al 12.2462\%, mentre la
+deviazione standard passa dal 10.0821\% al 14.6348\%.
 
-Il rendimento maggiore è accompagnato da una maggiore variabilità: la
-configurazione Smart migliore raggiunge una deviazione standard del 14,63\%,
-contro circa il 11,95\% osservato per Random. La scelta della strategia non
-dovrebbe quindi basarsi esclusivamente sul rendimento medio, ma sul rapporto
-tra rendimento ottenuto e variabilità dei risultati.
+Anche la finestra geometrica influenza il risultato. Con soglia di acquisto
+pari a 0.7 e capitale accantonato pari al 10\%, aumentando la finestra da 10
+a 100 timestamp il rendimento medio diminuisce dal 12.2462\% al 7.36828\%.
 
+Nel dataset utilizzato, quindi, le finestre più brevi sono associate a
+rendimenti medi maggiori per le configurazioni considerate. Questo risultato
+deve essere riferito ai dati e alle configurazioni utilizzate nell'esperimento
+e non viene esteso a dataset differenti.
 
-% =========================================================
-% 6. CONCLUSIONS
-% =========================================================
+La percentuale di capitale accantonato presenta invece variazioni più
+limitate. In particolare, per diverse combinazioni di finestra e soglia il
+rendimento rimane invariato al variare di questo parametro. In altri casi si
+osservano variazioni contenute, come nella configurazione con finestra 10 e
+soglia 0.9, nella quale il rendimento passa dal 6.90619\% con capitale
+accantonato pari al 10\% al 7.51935\% con capitale accantonato pari al 50\%.
 
+Nel complesso, nel campione analizzato la strategia
+\texttt{smartgeometricChoise} presenta rendimenti medi superiori rispetto
+alla baseline casuale per tutte le configurazioni considerate. Allo stesso
+tempo, presenta anche valori di deviazione standard generalmente maggiori.
+
+Per questo motivo il solo rendimento medio non è sufficiente a descrivere il
+comportamento della strategia. La deviazione standard permette infatti di
+considerare anche la variabilità dei risultati e di osservare il compromesso
+presente tra rendimento medio e variabilità.
 \chapter{Conclusioni}
+
 \label{chap:conclusions}
 
-Il lavoro ha portato alla realizzazione di un simulatore per lo studio di
-strategie di compravendita di energia elettrica su serie storiche di prezzi.
-Il sistema separa il caricamento dei dati, il modello del dominio, la logica
-di trading e l'esecuzione delle simulazioni, permettendo di confrontare
-strategie diverse con gli stessi vincoli economici ed energetici.
+Il lavoro svolto ha portato alla realizzazione di un simulatore per lo studio
+di strategie di compravendita di energia elettrica a partire da serie storiche
+di prezzi. Il sistema permette di modellare le principali componenti coinvolte
+nel processo di compravendita, gestire le operazioni di acquisto e vendita e
+ripetere le simulazioni su diverse configurazioni.
+La struttura del simulatore è stata progettata in modo da separare il caricamento
+dei dati, il modello del dominio, la gestione delle operazioni di trading
+e l'esecuzione delle simulazioni. Questa organizzazione permette di utilizzare
+strategie differenti mantenendo invariati i principali vincoli economici ed energetici del sistema.
 
 \section{Sintesi}
 
-L'obiettivo principale era verificare se una strategia basata sulla media
-geometrica potesse superare una baseline casuale. I risultati mostrano che la
-strategia Smart può ottenere rendimenti medi superiori in alcune
-configurazioni, in particolare con soglie di acquisto più permissive, ma il
-vantaggio è accompagnato da una maggiore variabilità. Di conseguenza, i dati
-non supportano l'idea di una strategia sempre migliore: l'efficacia dipende
-dai parametri e dalle serie storiche considerate.
+L'obiettivo principale del lavoro era verificare se l'utilizzo dello storico dei
+prezzi attraverso una media geometrica potesse portare a risultati differenti rispetto
+a una strategia che effettua le proprie scelte in modo casuale.
+I risultati ottenuti mostrano che, nel dataset e nelle configurazioni considerate,
+la strategia \texttt{smartgeometricChoise} ha prodotto rendimenti medi superiori rispetto
+alla baseline casuale. Le configurazioni Smart considerate hanno infatti ottenuto rendimenti
+medi compresi tra il 4.56965% e il 12.2462%, mentre quelli della baseline casuale sono
+compresi tra lo 0.604743% e l'1.31554%.
+Questo risultato è però accompagnato da una maggiore variabilità. La deviazione standard
+osservata per la strategia Smart è infatti superiore a quella osservata per la baseline
+casuale nel campione analizzato. Questo mostra che un rendimento medio maggiore non è
+sufficiente, da solo, per descrivere il comportamento di una strategia, ma deve essere
+considerato insieme alla variabilità dei risultati.
+Gli esperimenti hanno inoltre mostrato un'influenza dei parametri utilizzati dalla strategia.
+In particolare, nel dataset considerato, le configurazioni con finestre geometriche più brevi
+hanno generalmente prodotto rendimenti medi maggiori. Anche la soglia di acquisto ha avuto un
+effetto rilevante: riducendo la soglia da 0.9 a 0.7, il rendimento medio è aumentato nelle
+configurazioni analizzate, insieme alla deviazione standard.
+Il parametro relativo al capitale accantonato ha invece mostrato un'influenza più limitata.
+In diverse configurazioni il rendimento è rimasto invariato, mentre in altre si sono osservate variazioni contenute.
+I risultati ottenuti devono comunque essere riferiti alle serie storiche e alle configurazioni
+utilizzate nell'esperimento. Non è quindi possibile considerare la strategia Smart come
+generalmente migliore della baseline sulla base dei soli esperimenti effettuati. Il lavoro
+mostra piuttosto che l'utilizzo della media geometrica può produrre risultati differenti dalla
+scelta casuale e che tali risultati dipendono dai parametri utilizzati e dai dati sui quali
+viene eseguita la simulazione.
 
 \section{Sviluppi futuri}
 
-Tra i possibili sviluppi futuri rientrano:
-\begin{itemize}
-    \item l'estensione dell'analisi delle strategie considerate e l'impiego di
-        ulteriori indicatori statistici;
-    \item la valutazione su dataset più ampi e diversificati;
-    \item l'introduzione di procedure automatiche per la scelta dei
-        parametri, evitando di selezionare la configurazione migliore sugli
-        stessi dati usati per la valutazione;
-    \item la raccolta sistematica dei tempi di esecuzione e dell'uso della
-        memoria al variare del numero di thread;
-    \item l'aggiunta di test automatici per le invarianti di batteria,
-        portafoglio e servizio di trading.
-\end{itemize}
-
+Il simulatore realizzato può essere ulteriormente esteso sia dal punto di vista delle
+strategie sia da quello della valutazione sperimentale.
+Un primo possibile sviluppo consiste nell'introduzione di ulteriori strategie di trading
+e di altri indicatori statistici, in modo da poter confrontare approcci differenti
+utilizzando lo stesso ambiente di simulazione.
+Un secondo sviluppo riguarda l'utilizzo di dataset più ampi e diversificati. L'analisi
+potrebbe essere ripetuta su serie storiche provenienti da periodi differenti o da mercati
+differenti, verificando se i risultati osservati rimangono simili anche in condizioni diverse.
+Un ulteriore aspetto riguarda la scelta dei parametri. Nel lavoro i parametri delle strategie
+vengono variati nelle diverse configurazioni sperimentali. In futuro potrebbe essere introdotta
+una procedura automatica per la loro selezione. Tale procedura dovrebbe però separare i dati
+utilizzati per la scelta dei parametri da quelli utilizzati per la valutazione finale, in modo
+da evitare di selezionare una configurazione sulla base degli stessi dati sui quali viene poi
+misurato il risultato.
+Dal punto di vista dell'implementazione, sarebbe inoltre possibile approfondire la valutazione
+delle prestazioni del simulatore, raccogliendo in modo sistematico i tempi di esecuzione e
+l'utilizzo della memoria al variare del numero di thread utilizzati. Questo permetterebbe di valutare
+più precisamente l'effetto della parallelizzazione introdotta tramite OpenMP.
+Infine, il sistema potrebbe essere arricchito con un insieme più ampio di test automatici sulle
+principali invarianti del modello, in particolare per la batteria, il portafoglio e il servizio
+di trading. Questo permetterebbe di verificare automaticamente il rispetto dei vincoli del sistema
+anche in seguito all'introduzione di nuove funzionalità o strategie.
 
 % =========================================================
 % REFERENCES
 % =========================================================
 
 \bibliographystyle{plain}
-\bibliography{references}
+\nocite{*}
+\IfFileExists{references.bib}{%
+    \bibliography{references}%
+}{%
+    \bibliography{relazione/references}%
+}
 
 \end{document}

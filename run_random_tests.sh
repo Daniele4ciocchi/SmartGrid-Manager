@@ -2,34 +2,48 @@
 
 set -euo pipefail
 
-STRATEGY="${1:-random}"
+STRATEGY="random"
+if (( $# > 0 )) && [[ -n "$1" ]]; then
+    STRATEGY="$1"
+fi
+
 case "$STRATEGY" in
     random|geometric|smart) ;;
     *)
-        echo "Uso: $0 [random|geometric|smart]" >&2
+        echo "Uso: $0 [random|geometric|smart] [ripetizioni]" >&2
         exit 2
         ;;
 esac
 
-# Compila il progetto
+REPETITIONS=1
+if (( $# > 1 )); then
+    REPETITIONS="$2"
+fi
+if ! [[ "$REPETITIONS" =~ ^[1-9][0-9]*$ ]]; then
+    echo "Il numero di ripetizioni deve essere un intero positivo." >&2
+    exit 2
+fi
+
 echo "Compilazione in corso..."
-cd build || exit
+cd build
 make -j4
-cd .. || exit
+cd ..
 
-# Array di parametri da testare
-BUDGET_VALS=(10)
-SET_ASIDE_VALS=(10 20 30 50)
+echo "Avvio di $STRATEGY: $REPETITIONS ripetizione/i per Set Aside."
+echo "Il confronto con Smart viene effettuato a parità di Set Aside."
 
-echo "Inizio batteria di test..."
-
-for b in "${BUDGET_VALS[@]}"; do
-    for sa in "${SET_ASIDE_VALS[@]}"; do
-        echo "=========================================================="
-        echo "Esecuzione test con: Strategy=${STRATEGY}, Budget=${b}, SetAside=${sa}"
-        ./build/simulatore/main/simulatore --strategy "$STRATEGY" --budget "$b" --set-aside "$sa" --simulator
+for (( rep=1; rep<=REPETITIONS; rep++ )); do
+    for b in 10; do
+        for sa in 10 20 30 50; do
+            echo "=========================================================="
+            echo "Ripetizione=$rep/$REPETITIONS, Strategy=$STRATEGY, Budget=$b, SetAside=$sa"
+            ./build/simulatore/main/simulatore \
+                --strategy "$STRATEGY" \
+                --budget "$b" \
+                --set-aside "$sa" \
+                --simulator
+        done
     done
 done
 
-
-echo "Tutti i test completati! Controlla il file data/esperimenti.csv"
+echo "Tutte le esecuzioni completate. Risultati aggiunti a data/esperimenti.csv"

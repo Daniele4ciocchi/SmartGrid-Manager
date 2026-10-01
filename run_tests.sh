@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-STRATEGY="${1:-geometric}"
+STRATEGY="${1:-smart}"
 case "$STRATEGY" in
     random|geometric|smart) ;;
     *)

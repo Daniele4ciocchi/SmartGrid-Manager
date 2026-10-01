@@ -2,7 +2,6 @@ This is BibTeX, Version 0.99e (TeX Live 2026/Arch Linux)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: relazione.aux
 The style file: plain.bst
-I found no \citation commands---while reading file relazione.aux
 Database file #1: references.bib
 You've used 0 entries,
             2118 wiz_defined-function locations,
@@ -45,4 +44,3 @@ warning$ -- 0
 while$ -- 0
 width$ -- 0
 write$ -- 2
-(There was 1 error message)
